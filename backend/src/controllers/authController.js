@@ -52,6 +52,7 @@ const register = async (req, res) => {
     
     // Notification de bienvenue pour l'utilisateur
     await createNotification(
+      req.io,
       user.id,
       'Bienvenue sur CPM ! 🎉',
       finalApproved 
@@ -65,6 +66,7 @@ const register = async (req, res) => {
       const admins = await prisma.user.findMany({ where: { role: 'ADMIN' } })
       for (const admin of admins) {
         await createNotification(
+          req.io,
           admin.id,
           'Nouvelle inscription à valider 👤',
           `L'utilisateur ${name} (${email}) s'est inscrit et attend votre validation.`,

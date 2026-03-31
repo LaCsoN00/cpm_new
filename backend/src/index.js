@@ -18,7 +18,22 @@ const { Server } = require('socket.io')
 const app = express()
 const server = http.createServer(app)
 const io = new Server(server, {
-  cors: { origin: '*', methods: ['GET', 'POST', 'PUT', 'DELETE'] }
+  cors: { 
+    origin: ["https://cpm-new.vercel.app", "http://localhost:5173"],
+    methods: ["GET", "POST"],
+    credentials: true
+  }
+})
+
+// Add the Ngrok skip header for all requests to ensure API calls don't trigger the landing page
+app.use((req, res, next) => {
+  res.setHeader('Ngrok-Skip-Browser-Warning', 'true')
+  next()
+})
+
+// Correctly add headers for Socket.io polling
+io.engine.on("initial_headers", (headers, req) => {
+  headers["Ngrok-Skip-Browser-Warning"] = "true"
 })
 
 // Attach io to the request object so routes can broadcast events
@@ -27,7 +42,20 @@ app.use((req, res, next) => {
   next()
 })
 
-app.use(cors({ origin: '*', credentials: true }))
+app.use(cors({ 
+  origin: (origin, callback) => {
+    const allowed = ['https://cpm-new.vercel.app', 'http://localhost:5173']
+    if (!origin || allowed.includes(origin)) return callback(null, true)
+    callback(new Error('Interdit par la politique CORS'))
+  },
+  credentials: true 
+}))
+
+// Add the Ngrok skip header for all requests to ensure API calls don't trigger the landing page
+app.use((req, res, next) => {
+  res.setHeader('Ngrok-Skip-Browser-Warning', 'true')
+  next()
+})
 app.use(express.json())
 app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 

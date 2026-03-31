@@ -19,11 +19,11 @@ model User {
   isApproved           Boolean        @default(true)
   createdAt            DateTime       @default(now())
   updatedAt            DateTime       @updatedAt
+  comments             Comment[]
   notifications        Notification[]
   createdProjects      Project[]      @relation("ProjectCreator")
-  joinedProjects       Project[]      @relation("ProjectCollaborators")
   createdTickets       Ticket[]       @relation("TicketCreator")
-  comments             Comment[]
+  joinedProjects       Project[]      @relation("ProjectCollaborators")
 }
 
 model Project {
@@ -40,11 +40,14 @@ model Project {
   createdAt     DateTime      @default(now())
   updatedAt     DateTime      @updatedAt
   evaluations   Evaluation[]
+  invoices      Invoice[]
   milestones    Milestone[]
   client        Client        @relation(fields: [clientId], references: [id])
-  creator       User?         @relation("ProjectCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  creator       User?         @relation("ProjectCreator", fields: [creatorId], references: [id])
   collaborators User[]        @relation("ProjectCollaborators")
-  invoices      Invoice[]
+
+  @@index([clientId], map: "Project_clientId_fkey")
+  @@index([creatorId], map: "Project_creatorId_fkey")
 }
 
 model Milestone {
@@ -57,6 +60,8 @@ model Milestone {
   createdAt  DateTime        @default(now())
   updatedAt  DateTime        @updatedAt
   project    Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "Milestone_projectId_fkey")
 }
 
 model Evaluation {
@@ -68,6 +73,8 @@ model Evaluation {
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  @@index([projectId], map: "Evaluation_projectId_fkey")
 }
 
 model Ticket {
@@ -79,8 +86,10 @@ model Ticket {
   creatorId   Int?
   createdAt   DateTime       @default(now())
   updatedAt   DateTime       @updatedAt
-  creator     User?          @relation("TicketCreator", fields: [creatorId], references: [id], onDelete: SetNull)
   comments    Comment[]
+  creator     User?          @relation("TicketCreator", fields: [creatorId], references: [id])
+
+  @@index([creatorId], map: "Ticket_creatorId_fkey")
 }
 
 model Comment {
@@ -91,6 +100,9 @@ model Comment {
   createdAt DateTime @default(now())
   ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([ticketId], map: "Comment_ticketId_fkey")
+  @@index([userId], map: "Comment_userId_fkey")
 }
 
 model Client {
@@ -112,14 +124,11 @@ model Invoice {
   TVA            Float         @default(0)
   totalTTC       Float         @default(0)
   status         InvoiceStatus @default(PENDING)
-  
-  // Persistance de l'entreprise au moment du devis/facture
   companyName    String        @default("CPM Pro")
   companyAddress String?
   companyPhone   String?
   companyEmail   String?
-  companyLogo    String?       // Stockera les données Base64 (Data URL)
-
+  companyLogo    String?
   clientId       Int
   projectId      Int?
   createdAt      DateTime      @default(now())
@@ -127,6 +136,9 @@ model Invoice {
   client         Client        @relation(fields: [clientId], references: [id])
   project        Project?      @relation(fields: [projectId], references: [id])
   items          InvoiceItem[]
+
+  @@index([clientId], map: "Invoice_clientId_fkey")
+  @@index([projectId], map: "Invoice_projectId_fkey")
 }
 
 model InvoiceItem {
@@ -136,6 +148,8 @@ model InvoiceItem {
   price       Float
   invoiceId   Int
   invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+
+  @@index([invoiceId], map: "InvoiceItem_invoiceId_fkey")
 }
 
 model Notification {
@@ -147,6 +161,8 @@ model Notification {
   isRead    Boolean          @default(false)
   createdAt DateTime         @default(now())
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId], map: "Notification_userId_fkey")
 }
 
 enum Role {

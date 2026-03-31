@@ -9,6 +9,9 @@ const BACKEND_URL = import.meta.env.VITE_API_URL
 const socket = io(BACKEND_URL, {
   autoConnect: true,
   withCredentials: true,
+  extraHeaders: {
+    'ngrok-skip-browser-warning': 'true'
+  }
 })
 
 export default socket

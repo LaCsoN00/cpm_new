@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import axios from 'axios';
 import api, { getMediaUrl } from '../services/api';
 
 export default function AvatarImage({ src, alt, style, className }) {
@@ -19,7 +20,10 @@ export default function AvatarImage({ src, alt, style, className }) {
     
     // Si Ngrok est utilisé, l'image sera bloquée par l'avertissement de navigateur.
     // On télécharge donc l'image avec Axios (qui inclut l'en-tête de contournement) en BLOB.
-    api.get(src, { responseType: 'blob' })
+    axios.get(url, { 
+      headers: { 'ngrok-skip-browser-warning': 'true' },
+      responseType: 'blob' 
+    })
       .then(res => {
         if (isMounted) setObjectUrl(URL.createObjectURL(res.data));
       })

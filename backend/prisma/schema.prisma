@@ -1,0 +1,194 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                   Int            @id @default(autoincrement())
+  name                 String
+  email                String         @unique
+  password             String
+  avatar               String?
+  role                 Role           @default(COLLABORATOR)
+  emailNotifications   Boolean        @default(true)
+  browserNotifications Boolean        @default(false)
+  isApproved           Boolean        @default(true)
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @updatedAt
+  notifications        Notification[]
+  createdProjects      Project[]      @relation("ProjectCreator")
+  joinedProjects       Project[]      @relation("ProjectCollaborators")
+  createdTickets       Ticket[]       @relation("TicketCreator")
+  comments             Comment[]
+}
+
+model Project {
+  id            Int           @id @default(autoincrement())
+  name          String
+  description   String?
+  startDate     DateTime?
+  endDate       DateTime?
+  status        ProjectStatus @default(PLANNED)
+  responsible   String?
+  creatorId     Int?
+  clientId      Int
+  inviteCode    String        @unique @default(uuid())
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+  evaluations   Evaluation[]
+  milestones    Milestone[]
+  client        Client        @relation(fields: [clientId], references: [id])
+  creator       User?         @relation("ProjectCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  collaborators User[]        @relation("ProjectCollaborators")
+  invoices      Invoice[]
+}
+
+model Milestone {
+  id         Int             @id @default(autoincrement())
+  name       String
+  targetDate DateTime?
+  status     MilestoneStatus @default(PENDING)
+  progress   Int             @default(0)
+  projectId  Int
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+  project    Project         @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Evaluation {
+  id          Int      @id @default(autoincrement())
+  indicator   String
+  targetValue Float    @default(0)
+  actualValue Float    @default(0)
+  projectId   Int?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  project     Project? @relation(fields: [projectId], references: [id], onDelete: Cascade)
+}
+
+model Ticket {
+  id          Int            @id @default(autoincrement())
+  title       String
+  description String?
+  priority    TicketPriority @default(MEDIUM)
+  status      TicketStatus   @default(OPEN)
+  creatorId   Int?
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
+  creator     User?          @relation("TicketCreator", fields: [creatorId], references: [id], onDelete: SetNull)
+  comments    Comment[]
+}
+
+model Comment {
+  id        Int      @id @default(autoincrement())
+  content   String
+  ticketId  Int
+  userId    Int
+  createdAt DateTime @default(now())
+  ticket    Ticket   @relation(fields: [ticketId], references: [id], onDelete: Cascade)
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model Client {
+  id        Int       @id @default(autoincrement())
+  name      String
+  company   String?
+  email     String?
+  phone     String?
+  createdAt DateTime  @default(now())
+  invoices  Invoice[]
+  projects  Project[]
+}
+
+model Invoice {
+  id             Int           @id @default(autoincrement())
+  number         String        @unique
+  date           DateTime      @default(now())
+  totalHT        Float         @default(0)
+  TVA            Float         @default(0)
+  totalTTC       Float         @default(0)
+  status         InvoiceStatus @default(PENDING)
+  
+  // Persistance de l'entreprise au moment du devis/facture
+  companyName    String        @default("CPM Pro")
+  companyAddress String?
+  companyPhone   String?
+  companyEmail   String?
+  companyLogo    String?       // Stockera les données Base64 (Data URL)
+
+  clientId       Int
+  projectId      Int?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+  client         Client        @relation(fields: [clientId], references: [id])
+  project        Project?      @relation(fields: [projectId], references: [id])
+  items          InvoiceItem[]
+}
+
+model InvoiceItem {
+  id          Int     @id @default(autoincrement())
+  description String
+  quantity    Float
+  price       Float
+  invoiceId   Int
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+}
+
+model Notification {
+  id        Int              @id @default(autoincrement())
+  userId    Int
+  title     String
+  message   String
+  type      NotificationType @default(INFO)
+  isRead    Boolean          @default(false)
+  createdAt DateTime         @default(now())
+  user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+enum Role {
+  ADMIN
+  MANAGER
+  COLLABORATOR
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+}
+
+enum MilestoneStatus {
+  PENDING
+  ACHIEVED
+  NOT_ACHIEVED
+}
+
+enum TicketPriority {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum TicketStatus {
+  OPEN
+  IN_PROGRESS
+  RESOLVED
+}
+
+enum InvoiceStatus {
+  PENDING
+  APPROVED
+  REJECTED
+  PAID
+}
+
+enum NotificationType {
+  INFO
+  SUCCESS
+  WARNING
+  ERROR
+}

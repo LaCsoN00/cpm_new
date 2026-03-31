@@ -1,0 +1,8 @@
+
+[2026-03-21T19:53:32.051Z] PUT /invoices/4 - Body: {"status":"PENDING","clientId":3}
+
+[2026-03-21T19:53:32.059Z] updateData: {"status":"PENDING","clientId":3}
+
+[2026-03-21T19:54:07.322Z] PUT /invoices/4 - Body: {"status":"PAID","clientId":3}
+
+[2026-03-21T19:54:07.332Z] updateData: {"status":"PAID","clientId":3}

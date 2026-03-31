@@ -1,0 +1,19 @@
+{
+  "projects": [
+    {
+      "id": 7,
+      "name": "Project Test",
+      "description": "Description test",
+      "startDate": "2026-03-22T00:00:00.000Z",
+      "endDate": "2026-03-25T00:00:00.000Z",
+      "status": "PLANNED",
+      "responsible": "Luc Lacson",
+      "creatorId": 1,
+      "clientId": 2,
+      "inviteCode": "GPJPAGE7",
+      "createdAt": "2026-03-22T22:23:15.259Z",
+      "updatedAt": "2026-03-22T22:23:15.259Z"
+    }
+  ],
+  "evals": []
+}

@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 import useAuthStore from '../store/authStore'
-import { getMediaUrl } from '../services/api'
+import AvatarImage from './AvatarImage'
 import socket from '../services/socket'
 import { useLocation, useNavigate } from 'react-router-dom'
 import notificationService from '../services/notificationService'
@@ -230,7 +230,7 @@ export default function Navbar({ onMenuClick }) {
                 fontSize: 14, fontWeight: 700, color: 'white', overflow: 'hidden'
               }}>
                 {user?.avatar ? (
-                  <img src={getMediaUrl(user.avatar)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  <AvatarImage src={user.avatar} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                 ) : (
                   user?.name?.charAt(0)?.toUpperCase() || 'U'
                 )}

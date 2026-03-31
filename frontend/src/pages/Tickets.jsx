@@ -1,7 +1,8 @@
 import { useEffect, useState } from 'react'
 import { Plus, MessageSquare, AlertCircle, Minus, ArrowUp, Search } from 'lucide-react'
 import { useSearchParams } from 'react-router-dom'
-import api, { getMediaUrl } from '../services/api'
+import api from '../services/api'
+import AvatarImage from '../components/AvatarImage'
 import socket from '../services/socket'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
@@ -285,7 +286,7 @@ export default function Tickets() {
                 {showDetail.comments?.map(c => (
                   <div key={c.id} style={{ display: 'flex', gap: 12 }}>
                     {c.user.avatar ? (
-                      <img src={getMediaUrl(c.user.avatar)} alt="" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover' }} />
+                      <AvatarImage src={c.user.avatar} alt="" style={{ width: 32, height: 32, borderRadius: '50%', objectFit: 'cover', flexShrink: 0 }} />
                     ) : (
                       <div style={{ width: 32, height: 32, borderRadius: '50%', background: '#e2e8f0', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 12, fontWeight: 700, color: '#64748b' }}>
                         {c.user.name.charAt(0).toUpperCase()}

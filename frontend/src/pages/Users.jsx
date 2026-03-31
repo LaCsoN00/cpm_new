@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { UserCheck, Shield, Mail, UserX, Trash2 } from 'lucide-react'
 import api from '../services/api'
+import AvatarImage from '../components/AvatarImage'
 import socket from '../services/socket'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -100,7 +101,7 @@ export default function Users() {
           }}>
             <div style={{ display: 'flex', alignItems: 'center', gap: 14, marginBottom: 16 }}>
               {u.avatar ? (
-                <img src={`http://localhost:5000${u.avatar}`} alt={u.name} style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'cover' }} />
+                <AvatarImage src={u.avatar} alt={u.name} style={{ width: 50, height: 50, borderRadius: '50%', objectFit: 'cover' }} />
               ) : (
                 <div style={{ width: 50, height: 50, borderRadius: '50%', background: '#f1f5f9', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20, fontWeight: 700, color: '#64748b' }}>
                   {u.name.charAt(0).toUpperCase()}

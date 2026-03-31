@@ -1,7 +1,8 @@
 import { useEffect, useState, useRef } from 'react'
 import { Camera, Save, Lock, User, Mail, Shield, Calendar, FolderKanban, LifeBuoy, FileText, Eye, EyeOff, CheckCircle, ArrowLeft } from 'lucide-react'
 import { useNavigate } from 'react-router-dom'
-import api, { getMediaUrl } from '../services/api'
+import api from '../services/api'
+import AvatarImage from '../components/AvatarImage'
 import useAuthStore from '../store/authStore'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
@@ -125,7 +126,7 @@ export default function Profile() {
     }
   }
 
-  const avatarUrl = getMediaUrl(profile.avatar)
+  const avatarUrl = profile.avatar || null
 
   const statCards = [
     { label: t('profile.projects'), value: stats.projects, icon: FolderKanban, color: '#10b981', bg: '#dcfce7' },
@@ -177,7 +178,7 @@ export default function Profile() {
             onMouseLeave={e => e.currentTarget.style.transform = 'scale(1) translateY(0)'}
           >
             {avatarUrl ? (
-              <img src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+              <AvatarImage src={avatarUrl} alt="Avatar" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
             ) : (
               <span style={{ fontSize: 40, fontWeight: 900, color: 'white' }}>
                 {profile.name?.charAt(0)?.toUpperCase() || 'U'}

@@ -143,16 +143,18 @@ export default function Navbar({ onMenuClick }) {
           <Menu size={20} />
         </button>
 
-        <form onSubmit={handleSearch} style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, minHeight: 42 }}>
-          <Search size={16} strokeWidth={2.5} style={{ position: 'absolute', left: 14, color: '#94a3b8', zIndex: 1 }} />
-          <input
-            className="input-custom"
-            style={{ paddingLeft: 40, width: '100%', maxWidth: 220, height: 42, fontSize: 13 }}
-            placeholder={t('nav.search')}
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-        </form>
+        {window.innerWidth >= 640 && (
+          <form onSubmit={handleSearch} style={{ position: 'relative', display: 'flex', alignItems: 'center', flex: 1, minWidth: 0, minHeight: 42 }}>
+            <Search size={16} strokeWidth={2.5} style={{ position: 'absolute', left: 14, color: '#94a3b8', zIndex: 1 }} />
+            <input
+              className="input-custom"
+              style={{ paddingLeft: 40, width: '100%', maxWidth: 220, height: 42, fontSize: 13 }}
+              placeholder={t('nav.search')}
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </form>
+        )}
       </div>
 
       {/* Right side Container */}
@@ -187,20 +189,18 @@ export default function Navbar({ onMenuClick }) {
               <div 
                 ref={notifRef}
                 style={{ 
-                  position: 'absolute', 
-                  top: '56px', 
-                  right: 0, 
-                  width: window.innerWidth < 640 ? 'calc(100vw - 32px)' : 340,
+                  position: window.innerWidth < 640 ? 'fixed' : 'absolute', 
+                  top: window.innerWidth < 640 ? '80px' : '56px', 
+                  right: window.innerWidth < 640 ? '16px' : 0, 
+                  left: window.innerWidth < 640 ? '16px' : 'auto',
+                  width: window.innerWidth < 640 ? 'auto' : 340,
                   maxWidth: 340,
                   background: 'var(--surface-lowest)', 
                   borderRadius: 24, 
                   boxShadow: '0 10px 40px rgba(0,53,41,0.1)', 
                   zIndex: 60, 
                   border: '1px solid #f1f5f9', 
-                  overflow: 'hidden',
-                  transform: window.innerWidth < 640 ? 'translateX(calc(50% - 22px))' : 'none',
-                  left: window.innerWidth < 640 ? 'auto' : 'auto',
-                  marginRight: window.innerWidth < 640 ? '-16px' : '0'
+                  overflow: 'hidden'
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #f8fafc' }}>

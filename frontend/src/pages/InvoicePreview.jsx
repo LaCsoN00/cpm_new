@@ -200,8 +200,20 @@ export default function InvoicePreview() {
       </div>
 
       {/* Invoice Preview */}
-      <div className="invoice-print-area" style={{ maxWidth: 800, margin: '0 auto' }}>
-        <div style={{ background: 'white', borderRadius: 20, overflow: 'hidden', boxShadow: '0 4px 24px rgba(0,0,0,0.1)', display: 'flex', flexDirection: 'column', minHeight: 1000, position: 'relative' }}>
+      <div className="invoice-print-area" style={{ 
+          width: '100%',
+          maxWidth: '850px',
+          margin: '0 auto',
+          background: 'white',
+          minHeight: window.innerWidth < 640 ? 'auto' : '1100px',
+          boxShadow: '0 10px 40px rgba(0,0,0,0.05)',
+          borderRadius: window.innerWidth < 640 ? '16px' : '24px',
+          display: 'flex',
+          flexDirection: 'column',
+          position: 'relative',
+          overflow: 'hidden',
+          marginBottom: window.innerWidth < 640 ? '20px' : '0'
+        }}>
           {/* Watermark logo — centered flex container that covers the entire card */}
           {companyLogo && (
             <div style={{ position: 'absolute', top: '60%', left: '50%', transform: 'translate(-50%, -50%)', opacity: 0.06, pointerEvents: 'none', zIndex: 0 }}>
@@ -209,73 +221,85 @@ export default function InvoicePreview() {
             </div>
           )}
           {/* Header */}
-          <div style={{ background: 'linear-gradient(135deg, #1e3a8a, #1e40af)', padding: '32px 36px', color: 'white', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+          <div style={{ padding: window.innerWidth < 640 ? '24px 20px' : '48px 36px', borderBottom: '1px solid #f1f5f9', position: 'relative', zIndex: 1 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexDirection: window.innerWidth < 640 ? 'column' : 'row', gap: 16 }}>
+              <div>
+                <p style={{ fontSize: window.innerWidth < 640 ? 24 : 32, fontWeight: 900, color: '#1e3a8a', letterSpacing: -1 }}>{t('invoicePreview.invoiceLabel', { defaultValue: 'INVOICE' }).toUpperCase()}</p>
+                <p style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>#{invoice.number}</p>
+              </div>
+              <div className="no-print">
+                <button onClick={() => window.print()} className="btn-primary-custom" style={{ padding: '8px 20px', fontSize: 13 }}>
+                  <Printer size={16} /> {t('invoicePreview.printBtn', { defaultValue: 'Print' })}
+                </button>
+              </div>
+            </div>
+
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 32, flexDirection: window.innerWidth < 640 ? 'column' : 'row', gap: 24 }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
                 {companyLogo && (
                   <img src={companyLogo} alt="Logo" style={{ width: 56, height: 56, objectFit: 'contain', borderRadius: 10, background: 'white', padding: 6 }} />
                 )}
                 <div>
-                  <div style={{ fontSize: 26, fontWeight: 900, letterSpacing: '-0.5px' }}>{companyInfo.name || 'CPM Pro'}</div>
-                  <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.7)', marginTop: 4 }}>{companyInfo.address || ''}</div>
-                  <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>{companyInfo.phone || ''} • {companyInfo.email || ''}</div>
+                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.5px' }}>{companyInfo.name || 'CPM Pro'}</div>
+                  <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>{companyInfo.address || ''}</div>
+                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>{companyInfo.phone || ''} • {companyInfo.email || ''}</div>
                 </div>
               </div>
               <div style={{ textAlign: 'right' }}>
-                <div style={{ fontSize: 32, fontWeight: 900, color: 'rgba(255,255,255,0.95)' }}>{t('invoicePreview.invoiceCaps')}</div>
-                <div style={{ fontSize: 16, color: '#93c5fd', fontWeight: 700, marginTop: 4 }}>{invoice.number}</div>
-                <div style={{ fontSize: 13, color: 'rgba(255,255,255,0.6)', marginTop: 4 }}>{new Date(invoice.date).toLocaleDateString(i18n.language === 'en' ? 'en-US' : 'fr-FR')}</div>
+                <span style={{
+                  padding: '8px 20px', borderRadius: 40, fontWeight: 700, fontSize: 13,
+                  background: statusDisplay.bg,
+                  color: statusDisplay.color
+                }}>
+                  {statusDisplay.label}
+                </span>
               </div>
             </div>
           </div>
 
-          {/* Client + status */}
-          <div style={{ padding: '24px 36px', borderBottom: '1px solid #f1f5f9', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', background: '#fafbff', position: 'relative', zIndex: 1 }}>
-            <div>
-              <div style={{ fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', letterSpacing: '1px', marginBottom: 8 }}>{t('invoicePreview.billedTo')}</div>
-              <div style={{ fontSize: 16, fontWeight: 700, color: '#1e293b' }}>{invoice.client?.name}</div>
-              {invoice.project?.name && <div style={{ fontSize: 13, color: 'var(--primary)', fontWeight: 600, marginTop: 4 }}>{t('invoicePreview.project')} : {invoice.project.name}</div>}
-              {invoice.client?.company && <div style={{ fontSize: 13, color: '#64748b' }}>{invoice.client.company}</div>}
-              {invoice.client?.email && <div style={{ fontSize: 13, color: '#64748b' }}>{invoice.client.email}</div>}
-              {invoice.client?.phone && <div style={{ fontSize: 13, color: '#64748b' }}>{invoice.client.phone}</div>}
-            </div>
-            <span style={{
-              padding: '8px 20px', borderRadius: 40, fontWeight: 700, fontSize: 13,
-              background: statusDisplay.bg,
-              color: statusDisplay.color
-            }}>
-              {statusDisplay.label}
-            </span>
-          </div>
-
           {/* Body */}
-          <div style={{ padding: window.innerWidth < 640 ? '16px 20px' : '24px 36px', position: 'relative', zIndex: 1 }}>
-            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
-              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: window.innerWidth < 640 ? 500 : 'auto' }}>
-              <thead>
-                <tr style={{ background: '#1e40af' }}>
-                  {[t('invoicePreview.colDesc'), t('invoicePreview.colQty'), t('invoicePreview.colPrice'), t('invoicePreview.colHT')].map((h, i) => (
-                    <th key={h} style={{ padding: '12px 16px', textAlign: i > 0 ? 'right' : 'left', fontSize: 11, fontWeight: 700, color: 'white', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody>
-                {(invoice.items || []).map((item, idx) => (
-                  <tr key={idx} style={{ background: idx % 2 === 0 ? 'white' : '#f8fafc' }}>
-                    <td style={{ padding: '13px 16px', fontSize: 14, color: '#1e293b', fontWeight: 500 }}>{item.description}</td>
-                    <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: 14, color: '#64748b' }}>{item.quantity}</td>
-                    <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: 14, color: '#64748b' }}>{fmt(item.price)} {t('invoicePreview.currency')}</td>
-                    <td style={{ padding: '13px 16px', textAlign: 'right', fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{fmt(item.quantity * item.price)} {t('invoicePreview.currency')}</td>
+          <div style={{ padding: window.innerWidth < 640 ? '16px 16px' : '24px 36px', position: 'relative', zIndex: 1, flex: 1 }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', margin: window.innerWidth < 640 ? '0 -4px' : 0 }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: window.innerWidth < 640 ? 450 : 'auto' }}>
+                <thead>
+                  <tr style={{ background: '#1e40af' }}>
+                    {[t('invoicePreview.colDesc'), t('invoicePreview.colQty'), t('invoicePreview.colPrice'), t('invoicePreview.colHT')].map((h, i) => (
+                      <th key={h} style={{ 
+                        padding: window.innerWidth < 640 ? '10px 8px' : '14px 20px', 
+                        textAlign: i === 0 ? 'left' : 'right', 
+                        color: 'white', 
+                        fontSize: window.innerWidth < 640 ? 11 : 12, 
+                        fontWeight: 700, 
+                        textTransform: 'uppercase', 
+                        letterSpacing: 0.5 
+                      }}>{h}</th>
+                    ))}
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {(invoice.items || []).map((item, idx) => (
+                    <tr key={idx} style={{ borderBottom: '1px solid #f1f5f9' }}>
+                      <td style={{ padding: window.innerWidth < 640 ? '12px 8px' : '16px 20px', fontSize: window.innerWidth < 640 ? 12 : 14, color: '#1e293b', fontWeight: 500 }}>{item.description}</td>
+                      <td style={{ padding: window.innerWidth < 640 ? '12px 8px' : '16px 20px', textAlign: 'right', fontSize: window.innerWidth < 640 ? 12 : 14, color: '#475569' }}>{item.quantity}</td>
+                      <td style={{ padding: window.innerWidth < 640 ? '12px 8px' : '16px 20px', textAlign: 'right', fontSize: window.innerWidth < 640 ? 12 : 14, color: '#475569' }}>{fmt(item.price)}</td>
+                      <td style={{ padding: window.innerWidth < 640 ? '12px 8px' : '16px 20px', textAlign: 'right', fontSize: window.innerWidth < 640 ? 12 : 14, fontWeight: 700, color: '#1e293b' }}>{fmt(item.quantity * item.price)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
-        </div>
 
           {/* Totals — pushed to the bottom */}
           <div style={{ marginTop: 'auto', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: window.innerWidth < 640 ? '0 20px 24px 20px' : '0 36px 24px 36px' }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', padding: window.innerWidth < 640 ? '24px 20px' : '24px 36px', alignItems: 'flex-end' }}>
+              <div style={{ flex: 1 }}>
+                <p style={{ fontSize: 14, fontWeight: 800, color: '#1e293b', marginBottom: 4 }}>{t('invoicePreview.billedTo')}</p>
+                <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.5 }}>
+                  <p style={{ fontWeight: 700, color: '#1e293b', fontSize: 14 }}>{invoice.client?.name}</p>
+                  <p>{invoice.client?.email}</p>
+                </div>
+              </div>
               <div style={{ width: window.innerWidth < 640 ? '100%' : 280, background: '#f8fafc', borderRadius: 14, overflow: 'hidden' }}>
                 {[
                   { label: t('invoicePreview.labelHT'), value: invoice.totalHT },
@@ -294,7 +318,6 @@ export default function InvoicePreview() {
             </div>
           </div>
         </div>
-      </div>
 
       {/* Payment Modal */}
       {showPaymentModal && (

@@ -249,8 +249,9 @@ export default function InvoicePreview() {
           </div>
 
           {/* Body */}
-          <div style={{ padding: '24px 36px', position: 'relative', zIndex: 1 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <div style={{ padding: window.innerWidth < 640 ? '16px 20px' : '24px 36px', position: 'relative', zIndex: 1 }}>
+            <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse', minWidth: window.innerWidth < 640 ? 500 : 'auto' }}>
               <thead>
                 <tr style={{ background: '#1e40af' }}>
                   {[t('invoicePreview.colDesc'), t('invoicePreview.colQty'), t('invoicePreview.colPrice'), t('invoicePreview.colHT')].map((h, i) => (
@@ -270,23 +271,24 @@ export default function InvoicePreview() {
               </tbody>
             </table>
           </div>
+        </div>
 
           {/* Totals — pushed to the bottom */}
           <div style={{ marginTop: 'auto', position: 'relative', zIndex: 1 }}>
-            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: '0 36px 24px 36px' }}>
-              <div style={{ minWidth: 280, background: '#f8fafc', borderRadius: 14, overflow: 'hidden' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', padding: window.innerWidth < 640 ? '0 20px 24px 20px' : '0 36px 24px 36px' }}>
+              <div style={{ width: window.innerWidth < 640 ? '100%' : 280, background: '#f8fafc', borderRadius: 14, overflow: 'hidden' }}>
                 {[
                   { label: t('invoicePreview.labelHT'), value: invoice.totalHT },
                   { label: t('invoicePreview.labelTVA', { rate: computedTvaRate }), value: invoice.TVA },
                 ].map(({ label, value }) => (
-                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #e2e8f0', fontSize: 14 }}>
+                  <div key={label} style={{ display: 'flex', justifyContent: 'space-between', padding: '12px 20px', borderBottom: '1px solid #e2e8f0', fontSize: 13 }}>
                     <span style={{ color: '#64748b' }}>{label} :</span>
                     <span style={{ fontWeight: 600, color: '#1e293b' }}>{fmt(value)} {t('invoicePreview.currency')}</span>
                   </div>
                 ))}
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 20px', background: '#1e40af' }}>
-                  <span style={{ fontWeight: 800, color: 'white', fontSize: 15 }}>{t('invoicePreview.labelTTC')}</span>
-                  <span style={{ fontWeight: 900, color: 'white', fontSize: 18 }}>{fmt(invoice.totalTTC)} {t('invoicePreview.currency')}</span>
+                  <span style={{ fontWeight: 800, color: 'white', fontSize: 14 }}>{t('invoicePreview.labelTTC')}</span>
+                  <span style={{ fontWeight: 900, color: 'white', fontSize: 16 }}>{fmt(invoice.totalTTC)} {t('invoicePreview.currency')}</span>
                 </div>
               </div>
             </div>

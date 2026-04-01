@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { Plus, Search, Edit2, Trash2, Eye, Calendar, User, UserPlus, Key } from 'lucide-react'
+import { Plus, Search, Edit2, Trash2, Eye, Calendar, User, UserPlus, Key, ArrowLeft } from 'lucide-react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import api from '../services/api'
 import socket from '../services/socket'
@@ -138,9 +138,16 @@ export default function Projects() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 className="page-title">{t('projects.title')}</h1>
-          <p className="page-subtitle">{t('projects.subtitle', { count: projects.length })}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {window.innerWidth < 640 && (
+            <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div>
+            <h1 className="page-title">{t('projects.title')}</h1>
+            <p className="page-subtitle">{t('projects.subtitle', { count: projects.length })}</p>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 12 }}>
           {user?.role !== 'ADMIN' && (
@@ -325,7 +332,14 @@ export default function Projects() {
               </div>
               <div style={{ marginBottom: 20 }}>
                 <label style={{ display: 'block', fontSize: 13, fontWeight: 600, marginBottom: 6, color: '#374151' }}>{t('projects.status')}</label>
-                <select className="input-custom" value={form.status} onChange={e => setForm(f => ({ ...f, status: e.target.value }))}>
+                <select 
+                  className="input-custom" 
+                  value={form.status} 
+                  onChange={e => setForm(f => ({ ...f, status: e.target.value }))}
+                  disabled={!editProject}
+                  style={!editProject ? { opacity: 0.7, cursor: 'not-allowed' } : {}}
+                  title={!editProject ? t('projects.statusLocked') || 'Le statut par défaut est planifié' : ''}
+                >
                   <option value="PLANNED">{t('projects.PLANNED')}</option>
                   <option value="IN_PROGRESS">{t('projects.IN_PROGRESS')}</option>
                   <option value="COMPLETED">{t('projects.COMPLETED')}</option>

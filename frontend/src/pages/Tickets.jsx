@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Plus, MessageSquare, AlertCircle, Minus, ArrowUp, Search } from 'lucide-react'
-import { useSearchParams } from 'react-router-dom'
+import { Plus, MessageSquare, AlertCircle, Minus, ArrowUp, Search, ArrowLeft } from 'lucide-react'
+import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarImage from '../components/AvatarImage'
 import socket from '../services/socket'
@@ -22,6 +22,7 @@ const EMPTY_FORM = { title: '', description: '', priority: 'MEDIUM', status: 'OP
 
 export default function Tickets() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [searchParams] = useSearchParams()
   const [tickets, setTickets] = useState([])
   const [search, setSearch] = useState(searchParams.get('search') || '')
@@ -133,9 +134,16 @@ export default function Tickets() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 className="page-title">{t('tickets.title')}</h1>
-          <p className="page-subtitle">{t('tickets.subtitle', { count: tickets.length, open: tickets.filter(ti => ti.status === 'OPEN').length })}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {window.innerWidth < 640 && (
+            <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div>
+            <h1 className="page-title">{t('tickets.title')}</h1>
+            <p className="page-subtitle">{t('tickets.subtitle', { count: tickets.length, open: tickets.filter(ti => ti.status === 'OPEN').length })}</p>
+          </div>
         </div>
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <div style={{ position: 'relative', width: 250 }}>

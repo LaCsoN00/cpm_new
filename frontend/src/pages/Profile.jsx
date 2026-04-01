@@ -152,12 +152,16 @@ export default function Profile() {
     <ErrorBoundary>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>
         <div style={{ marginBottom: 24, display: 'flex', alignItems: 'center', gap: 16 }}>
-          <button onClick={() => navigate(-1)} className="btn-ghost-custom" style={{ padding: '8px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-            <ArrowLeft size={20} />
-          </button>
-          <div>
-            <h1 className="page-title">{t('profile.title')}</h1>
-            <p className="page-subtitle">{t('profile.subtitle')}</p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 }}>
+            {window.innerWidth < 640 && (
+              <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+                <ArrowLeft size={18} />
+              </button>
+            )}
+            <div>
+              <h1 className="page-title">{t('profile.title')}</h1>
+              <p className="page-subtitle">{t('profile.subtitle')}</p>
+            </div>
           </div>
         </div>
 

@@ -1,5 +1,5 @@
 import { Menu, Bell, Search, Check, Trash2, X } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 import useAuthStore from '../store/authStore'
@@ -17,6 +17,21 @@ export default function Navbar({ onMenuClick }) {
   const [showNotifs, setShowNotifs] = useState(false)
   const [showUserMenu, setShowUserMenu] = useState(false)
   const [notifications, setNotifications] = useState([])
+  const notifRef = useRef(null)
+  const userMenuRef = useRef(null)
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (notifRef.current && !notifRef.current.contains(event.target)) {
+        setShowNotifs(false)
+      }
+      if (userMenuRef.current && !userMenuRef.current.contains(event.target)) {
+        setShowUserMenu(false)
+      }
+    }
+    document.addEventListener('mousedown', handleClickOutside)
+    return () => document.removeEventListener('mousedown', handleClickOutside)
+  }, [])
 
   const fetchNotifs = async () => {
     if (!user) return
@@ -169,7 +184,25 @@ export default function Navbar({ onMenuClick }) {
             </button>
 
             {showNotifs && (
-              <div style={{ position: 'absolute', top: '56px', right: 0, width: 340, background: 'var(--surface-lowest)', borderRadius: 24, boxShadow: '0 10px 40px rgba(0,53,41,0.1)', zIndex: 60, border: '1px solid #f1f5f9', overflow: 'hidden' }}>
+              <div 
+                ref={notifRef}
+                style={{ 
+                  position: 'absolute', 
+                  top: '56px', 
+                  right: 0, 
+                  width: window.innerWidth < 640 ? 'calc(100vw - 32px)' : 340,
+                  maxWidth: 340,
+                  background: 'var(--surface-lowest)', 
+                  borderRadius: 24, 
+                  boxShadow: '0 10px 40px rgba(0,53,41,0.1)', 
+                  zIndex: 60, 
+                  border: '1px solid #f1f5f9', 
+                  overflow: 'hidden',
+                  transform: window.innerWidth < 640 ? 'translateX(calc(50% - 22px))' : 'none',
+                  left: window.innerWidth < 640 ? 'auto' : 'auto',
+                  marginRight: window.innerWidth < 640 ? '-16px' : '0'
+                }}
+              >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #f8fafc' }}>
                   <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>{t('nav.notifications')}</div>
                   <div style={{ display: 'flex', gap: 12 }}>
@@ -244,7 +277,7 @@ export default function Navbar({ onMenuClick }) {
             </div>
 
             {showUserMenu && (
-              <div style={{ position: 'absolute', top: '56px', right: 0, width: 220, background: 'var(--surface-lowest)', borderRadius: 24, boxShadow: '0 10px 40px rgba(0,53,41,0.1)', padding: 12, zIndex: 60, border: '1px solid #f1f5f9' }}>
+              <div ref={userMenuRef} style={{ position: 'absolute', top: '56px', right: 0, width: 220, background: 'var(--surface-lowest)', borderRadius: 24, boxShadow: '0 10px 40px rgba(0,53,41,0.1)', padding: 12, zIndex: 60, border: '1px solid #f1f5f9' }}>
                 <div onClick={() => { navigate('/profile'); setShowUserMenu(false) }} style={{ padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', borderRadius: 12, color: 'var(--text-main)' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-color)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>{t('nav.myProfile')}</div>
                 {user?.role === 'ADMIN' && (
                   <div onClick={() => { navigate('/settings'); setShowUserMenu(false) }} style={{ padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', borderRadius: 12, color: 'var(--text-main)' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-color)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>{t('nav.settings')}</div>

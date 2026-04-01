@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { TrendingUp, TrendingDown, Minus, Trash2, Target, Plus, Edit2 } from 'lucide-react'
+import { TrendingUp, TrendingDown, Minus, Trash2, Target, Plus, Edit2, ArrowLeft } from 'lucide-react'
 import api from '../services/api'
 import socket from '../services/socket'
 import toast from 'react-hot-toast'
@@ -14,6 +14,8 @@ export default function Evaluations() {
   const { t } = useTranslation()
   const user = useAuthStore(state => state.user)
   const isManager = user?.role === 'MANAGER'
+  const isAdmin = user?.role === 'ADMIN'
+  const navigate = useNavigate()
   const [evals, setEvals] = useState([])
   const [projects, setProjects] = useState([])
   const [mounted, setMounted] = useState(false)
@@ -125,15 +127,17 @@ export default function Evaluations() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 className="page-title">{t('evaluations.title')}</h1>
-          <p className="page-subtitle">{t('evaluations.subtitle', { count: evals.length })}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {window.innerWidth < 640 && (
+            <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div>
+            <h1 className="page-title">{t('evaluations.title')}</h1>
+            <p className="page-subtitle">{t('evaluations.subtitle', { count: evals.length })}</p>
+          </div>
         </div>
-        {isManager && (
-          <button className="btn-primary-custom" onClick={openCreate}>
-            <Plus size={18} /> {t('evaluations.newIndicator')}
-          </button>
-        )}
       </div>
 
       {/* KPI Summary Cards */}
@@ -196,7 +200,6 @@ export default function Evaluations() {
               <th>{t('evaluations.colTarget')}</th>
               <th>{t('evaluations.colActual')}</th>
               <th>{t('evaluations.colPerf')}</th>
-              {isManager && <th>{t('evaluations.colActions')}</th>}
             </tr>
           </thead>
           <tbody>
@@ -230,26 +233,6 @@ export default function Evaluations() {
                       </div>
                     </div>
                   </td>
-                  {isManager && (
-                    <td data-label={t('evaluations.colActions')}>
-                      <div style={{ display: 'flex', gap: 6 }}>
-                        <button
-                          onClick={() => openEdit(ev)}
-                          style={{ background: '#fef3c7', border: 'none', cursor: 'pointer', width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#d97706' }}
-                          title={t('evaluations.editEval')}
-                        >
-                          <Edit2 size={13} />
-                        </button>
-                        <button
-                          onClick={() => handleDelete(ev.id)}
-                          style={{ background: '#fef2f2', border: 'none', cursor: 'pointer', width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}
-                          title={t('evaluations.confirmDelete')}
-                        >
-                          <Trash2 size={13} />
-                        </button>
-                      </div>
-                    </td>
-                  )}
                 </tr>
               )
             })}

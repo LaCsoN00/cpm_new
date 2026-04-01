@@ -8,9 +8,14 @@ const prisma = new PrismaClient()
 router.use(auth)
 
 const generateNumber = async () => {
-  const count = await prisma.invoice.count()
+  const last = await prisma.invoice.findFirst({ orderBy: { id: 'desc' }, select: { number: true } })
   const year = new Date().getFullYear()
-  return `FAC-${year}-${String(count + 1).padStart(4, '0')}`
+  let next = 1
+  if (last && last.number.includes(`FAC-${year}`)) {
+    const parts = last.number.split('-')
+    next = parseInt(parts[parts.length - 1]) + 1
+  }
+  return `FAC-${year}-${String(next).padStart(4, '0')}`
 }
 
 router.get('/', async (req, res) => {

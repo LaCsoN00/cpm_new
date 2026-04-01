@@ -1,14 +1,16 @@
 import { useEffect, useState } from 'react'
-import { UserCheck, Shield, Mail, UserX, Trash2 } from 'lucide-react'
+import { UserCheck, Shield, Mail, UserX, Trash2, ArrowLeft } from 'lucide-react'
 import api from '../services/api'
 import AvatarImage from '../components/AvatarImage'
 import socket from '../services/socket'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
 
 export default function Users() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [users, setUsers] = useState([])
   const [loading, setLoading] = useState(true)
   const currentUser = useAuthStore(state => state.user)
@@ -85,9 +87,16 @@ export default function Users() {
 
   return (
     <div>
-      <div style={{ marginBottom: 24 }}>
-        <h1 className="page-title">{t('users.title')}</h1>
-        <p className="page-subtitle">{t('users.subtitle')}</p>
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+            <ArrowLeft size={18} />
+          </button>
+          <div>
+            <h1 className="page-title">{t('users.title')}</h1>
+            <p className="page-subtitle">{t('users.subtitle')}</p>
+          </div>
+        </div>
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 20 }}>

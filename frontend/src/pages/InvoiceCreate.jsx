@@ -88,7 +88,6 @@ export default function InvoiceCreate() {
         </button>
         <div style={{ flex: 1 }}>
           <h1 className="page-title">{t('invoiceCreate.title')}</h1>
-          <p className="page-subtitle">{t('invoiceCreate.subtitle')}</p>
         </div>
         <button className="btn-primary-custom" onClick={handleSubmit} disabled={loading}>
           <FileText size={18} /> {loading ? t('invoiceCreate.creating') : t('invoiceCreate.createBtn')}
@@ -192,39 +191,74 @@ export default function InvoiceCreate() {
           <button className="btn-primary-custom" style={{ padding: '7px 14px', fontSize: 13 }} onClick={addItem}><Plus size={15} /> {t('invoiceCreate.addItem')}</button>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse' }}>
-            <thead>
-              <tr>
-                {[t('invoiceCreate.colDesc'), t('invoiceCreate.colQty'), t('invoiceCreate.colPrice', { currency: t('invoiceCreate.currency') }), t('invoiceCreate.colTotal', { currency: t('invoiceCreate.currency') }), ''].map(h => (
-                  <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#94a3b8', borderBottom: '1px solid #f1f5f9', background: '#f8fafc' }}>{h}</th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
+        <div className="invoice-items-container">
+          {window.innerWidth < 768 ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
               {items.map((item, idx) => (
-                <tr key={idx}>
-                  <td style={{ padding: '8px 12px', width: '45%' }}>
-                    <input className="input-custom" style={{ fontSize: 13 }} placeholder={t('invoiceCreate.descPlaceholder')} value={item.description} onChange={e => updateItem(idx, 'description', e.target.value)} />
-                  </td>
-                  <td style={{ padding: '8px 12px', width: '12%' }}>
-                    <input className="input-custom" type="number" min="0.01" step="0.01" style={{ fontSize: 13, textAlign: 'right' }} value={item.quantity} onChange={e => updateItem(idx, 'quantity', e.target.value)} />
-                  </td>
-                  <td style={{ padding: '8px 12px', width: '18%' }}>
-                    <input className="input-custom" type="number" min="0" step="0.01" style={{ fontSize: 13, textAlign: 'right' }} value={item.price} onChange={e => updateItem(idx, 'price', e.target.value)} />
-                  </td>
-                  <td style={{ padding: '8px 12px', fontWeight: 700, color: '#1e293b', fontSize: 14 }}>
-                    {fmt((parseFloat(item.quantity) || 0) * (parseFloat(item.price) || 0))} {t('invoiceCreate.currency')}
-                  </td>
-                  <td style={{ padding: '8px 12px' }}>
+                <div key={idx} style={{ background: '#f8fafc', padding: 16, borderRadius: 16, border: '1px solid #e2e8f0', position: 'relative' }}>
+                  <div style={{ marginBottom: 12 }}>
+                    <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>{t('invoiceCreate.colDesc')}</label>
+                    <input className="input-custom" style={{ fontSize: 13, background: 'white' }} placeholder={t('invoiceCreate.descPlaceholder')} value={item.description} onChange={e => updateItem(idx, 'description', e.target.value)} />
+                  </div>
+                  <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 12 }}>
+                    <div>
+                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>{t('invoiceCreate.colQty')}</label>
+                      <input className="input-custom" type="number" min="0.01" step="0.01" style={{ fontSize: 13, textAlign: 'right', background: 'white' }} value={item.quantity} onChange={e => updateItem(idx, 'quantity', e.target.value)} />
+                    </div>
+                    <div>
+                      <label style={{ display: 'block', fontSize: 11, fontWeight: 700, color: '#94a3b8', textTransform: 'uppercase', marginBottom: 4 }}>{t('invoiceCreate.colPrice', { currency: '' })}</label>
+                      <input className="input-custom" type="number" min="0" step="0.01" style={{ fontSize: 13, textAlign: 'right', background: 'white' }} value={item.price} onChange={e => updateItem(idx, 'price', e.target.value)} />
+                    </div>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingTop: 12, borderTop: '1px dashed #e2e8f0' }}>
+                    <div style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>
+                      {fmt((parseFloat(item.quantity) || 0) * (parseFloat(item.price) || 0))} {t('invoiceCreate.currency')}
+                    </div>
                     {items.length > 1 && (
-                      <button onClick={() => removeItem(idx)} style={{ background: '#fef2f2', border: 'none', cursor: 'pointer', width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}><Trash2 size={13} /></button>
+                      <button onClick={() => removeItem(idx)} style={{ background: '#fef2f2', border: 'none', cursor: 'pointer', width: 32, height: 32, borderRadius: 8, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}>
+                        <Trash2 size={16} />
+                      </button>
                     )}
-                  </td>
-                </tr>
+                  </div>
+                </div>
               ))}
-            </tbody>
-          </table>
+            </div>
+          ) : (
+            <div style={{ overflowX: 'auto' }}>
+              <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+                <thead>
+                  <tr>
+                    {[t('invoiceCreate.colDesc'), t('invoiceCreate.colQty'), t('invoiceCreate.colPrice', { currency: t('invoiceCreate.currency') }), t('invoiceCreate.colTotal', { currency: t('invoiceCreate.currency') }), ''].map(h => (
+                      <th key={h} style={{ padding: '10px 12px', textAlign: 'left', fontSize: 11, fontWeight: 700, textTransform: 'uppercase', color: '#94a3b8', borderBottom: '1px solid #f1f5f9', background: '#f8fafc' }}>{h}</th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {items.map((item, idx) => (
+                    <tr key={idx}>
+                      <td style={{ padding: '8px 12px', width: '45%' }}>
+                        <input className="input-custom" style={{ fontSize: 13 }} placeholder={t('invoiceCreate.descPlaceholder')} value={item.description} onChange={e => updateItem(idx, 'description', e.target.value)} />
+                      </td>
+                      <td style={{ padding: '8px 12px', width: '12%' }}>
+                        <input className="input-custom" type="number" min="0.01" step="0.01" style={{ fontSize: 13, textAlign: 'right' }} value={item.quantity} onChange={e => updateItem(idx, 'quantity', e.target.value)} />
+                      </td>
+                      <td style={{ padding: '8px 12px', width: '18%' }}>
+                        <input className="input-custom" type="number" min="0" step="0.01" style={{ fontSize: 13, textAlign: 'right' }} value={item.price} onChange={e => updateItem(idx, 'price', e.target.value)} />
+                      </td>
+                      <td style={{ padding: '8px 12px', fontWeight: 700, color: '#1e293b', fontSize: 14 }}>
+                        {fmt((parseFloat(item.quantity) || 0) * (parseFloat(item.price) || 0))} {t('invoiceCreate.currency')}
+                      </td>
+                      <td style={{ padding: '8px 12px' }}>
+                        {items.length > 1 && (
+                          <button onClick={() => removeItem(idx)} style={{ background: '#fef2f2', border: 'none', cursor: 'pointer', width: 28, height: 28, borderRadius: 7, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#dc2626' }}><Trash2 size={13} /></button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </div>
 
         {/* Totals */}

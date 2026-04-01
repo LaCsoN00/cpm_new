@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react'
-import { Plus, Search, CheckCircle, Clock, XCircle, Edit2, Trash2 } from 'lucide-react'
+import { Plus, Search, CheckCircle, Clock, XCircle, Edit2, Trash2, ArrowLeft } from 'lucide-react'
 import api from '../services/api'
 import socket from '../services/socket'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
 
 const MS_COLORS = { ACHIEVED: { bg: '#f0fdf4', color: '#16a34a' }, NOT_ACHIEVED: { bg: '#fef2f2', color: '#dc2626' }, PENDING: { bg: '#fef3c7', color: '#d97706' } }
 const EMPTY_FORM = { name: '', targetDate: '', status: 'PENDING', progress: 0, projectId: '' }
@@ -85,9 +86,16 @@ export default function Milestones() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 className="page-title">{t('milestones.title')}</h1>
-          <p className="page-subtitle">{t('milestones.subtitle', { count: milestones.length })}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {window.innerWidth < 640 && (
+            <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div>
+            <h1 className="page-title">{t('milestones.title')}</h1>
+            <p className="page-subtitle">{t('milestones.subtitle', { count: milestones.length })}</p>
+          </div>
         </div>
         {user?.role === 'MANAGER' && (
           <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> {t('milestones.newMs')}</button>

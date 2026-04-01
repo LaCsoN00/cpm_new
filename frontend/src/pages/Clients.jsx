@@ -1,15 +1,17 @@
 import { useEffect, useState } from 'react'
-import { Plus, Search, Edit2, Trash2, User, Mail, Phone, Building2 } from 'lucide-react'
+import { Plus, Search, Edit2, Trash2, User, Mail, Phone, Building2, UserPlus, ArrowLeft } from 'lucide-react'
 import api from '../services/api'
 import socket from '../services/socket'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
+import { useNavigate } from 'react-router-dom'
 
 const EMPTY_FORM = { name: '', company: '', email: '', phone: '' }
 
 export default function Clients() {
   const { t } = useTranslation()
+  const navigate = useNavigate()
   const [clients, setClients] = useState([])
   const [search, setSearch] = useState('')
   const [showModal, setShowModal] = useState(false)
@@ -64,12 +66,19 @@ export default function Clients() {
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>
-        <div>
-          <h1 className="page-title">{t('clients.title')}</h1>
-          <p className="page-subtitle">{t('clients.subtitle', { count: clients.length })}</p>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+          {window.innerWidth < 640 && (
+            <button onClick={() => navigate(-1)} style={{ background: '#f1f5f9', border: 'none', cursor: 'pointer', width: 36, height: 36, borderRadius: 10, display: 'flex', alignItems: 'center', justifyContent: 'center', color: '#64748b' }}>
+              <ArrowLeft size={18} />
+            </button>
+          )}
+          <div>
+            <h1 className="page-title">{t('clients.title')}</h1>
+            <p className="page-subtitle">{t('clients.subtitle', { count: clients.length })}</p>
+          </div>
         </div>
         {user?.role === 'MANAGER' && (
-          <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> {t('clients.newClient')}</button>
+          <button className="btn-primary-custom" onClick={openCreate}><UserPlus size={18} /> {t('clients.newClient')}</button>
         )}
       </div>
 

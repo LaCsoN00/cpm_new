@@ -7,6 +7,7 @@ import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContaine
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import ErrorBoundary from '../components/ErrorBoundary'
+import { useNavigate } from 'react-router-dom'
 
 const EMPTY_FORM = { indicator: '', targetValue: 100, actualValue: 0, projectId: '' }
 

@@ -12,6 +12,7 @@ const EMPTY_FORM = { name: '', targetDate: '', status: 'PENDING', progress: 0, p
 
 export default function Milestones() {
   const { t, i18n } = useTranslation()
+  const navigate = useNavigate()
   const [milestones, setMilestones] = useState([])
   const [projects, setProjects] = useState([])
   const [search, setSearch] = useState('')

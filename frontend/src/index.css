@@ -88,8 +88,6 @@ h4,
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   padding: 1.5rem 1rem;
   border-right: 1px solid rgba(0, 0, 0, 0.03);
-  overflow-y: auto;
-  overflow-x: hidden;
   height: 100%;
 }
 
@@ -840,8 +838,7 @@ h4,
 
   .hide-text-mobile,
   .btn-primary-custom span,
-  .btn-ghost-custom span,
-  .filter-pill span {
+  .btn-ghost-custom span {
     display: none !important;
   }
 }

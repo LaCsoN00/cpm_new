@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { Plus, MessageSquare, AlertCircle, Minus, ArrowUp, Search, ArrowLeft } from 'lucide-react'
+import { Plus, MessageSquare, AlertCircle, Minus, ArrowUp, Search, ArrowLeft, SendHorizontal } from 'lucide-react'
 import { useSearchParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarImage from '../components/AvatarImage'
@@ -327,8 +327,8 @@ export default function Tickets() {
                     value={comment}
                     onChange={e => setComment(e.target.value)}
                   />
-                  <button type="submit" className="btn-primary-custom" disabled={loading || !comment.trim()} style={{ height: 40, padding: '0 16px' }}>
-                    <span>{t('tickets.sendBtn') || "Envoyer"}</span>
+                  <button type="submit" className="btn-primary-custom" disabled={loading || !comment.trim()} style={{ height: 40, padding: '0 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
+                    <SendHorizontal size={16} /> <span>{t('tickets.send') || "Envoyer"}</span>
                   </button>
                 </form>
               )}

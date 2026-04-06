@@ -60,7 +60,7 @@ export default function Login() {
             }}
           />
           <h1 style={{ fontSize: 36, fontWeight: 900, color: 'white', letterSpacing: '-1.5px', fontFamily: "'Manrope', sans-serif" }}>
-            CPM<span style={{ opacity: 0.7 }}> Pro</span>
+            CPM
           </h1>
           <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: 14, marginTop: 10, fontWeight: 600, letterSpacing: '1px', textTransform: 'uppercase' }}>
             Libreville • Gabon

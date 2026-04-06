@@ -91,12 +91,29 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
               </NavLink>
             </>
           )}
-          <button onClick={handleLogout} className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`} style={{ width: '100%', border: 'none', background: 'transparent', textAlign: 'left', cursor: 'pointer', color: '#ef4444', fontFamily: 'inherit' }} title={isCollapsed ? t('nav.logout') : ''}>
-            <LogOut size={18} strokeWidth={2} />
-            {!isCollapsed && <span style={{ fontWeight: 700 }}>{t('nav.logout')}</span>}
-          </button>
         </div>
       </nav>
+
+      <div style={{ padding: '0 8px', marginTop: 'auto' }}>
+        <button 
+          onClick={handleLogout} 
+          className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`} 
+          style={{ 
+            width: '100%', 
+            border: 'none', 
+            background: 'transparent', 
+            textAlign: 'left', 
+            cursor: 'pointer', 
+            color: '#ef4444', 
+            fontFamily: 'inherit',
+            marginTop: 12
+          }} 
+          title={isCollapsed ? t('nav.logout') : ''}
+        >
+          <LogOut size={18} strokeWidth={2} />
+          {!isCollapsed && <span style={{ fontWeight: 700 }}>{t('nav.logout')}</span>}
+        </button>
+      </div>
     </aside>
   )
 }

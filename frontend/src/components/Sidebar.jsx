@@ -41,7 +41,7 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
       {/* Logo */}
       <div style={{ padding: isCollapsed ? '8px 0 16px 0' : '8px 16px 16px', textAlign: isCollapsed ? 'center' : 'left' }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: isCollapsed ? 'center' : 'flex-start', gap: 12 }}>
-          <img src="/favicon.svg" alt="Logo" style={{ width: 40, height: 40, objectFit: 'contain' }} />
+          <img src="/icon-512x512.png" alt="Logo" style={{ width: 40, height: 40, objectFit: 'contain' }} />
           {!isCollapsed && (
             <div>
               <div style={{ fontWeight: 800, fontSize: 18, color: 'var(--text-main)', letterSpacing: '-0.5px' }}>CPM</div>
@@ -95,18 +95,18 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
       </nav>
 
       <div style={{ padding: '0 8px', marginTop: 'auto', marginBottom: 24 }}>
-        <button 
-          onClick={handleLogout} 
-          className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`} 
-          style={{ 
-            width: '100%', 
-            border: 'none', 
-            background: 'transparent', 
-            textAlign: 'left', 
-            cursor: 'pointer', 
-            color: '#ef4444', 
+        <button
+          onClick={handleLogout}
+          className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`}
+          style={{
+            width: '100%',
+            border: 'none',
+            background: 'transparent',
+            textAlign: 'left',
+            cursor: 'pointer',
+            color: '#ef4444',
             fontFamily: 'inherit'
-          }} 
+          }}
           title={isCollapsed ? t('nav.logout') : ''}
         >
           <LogOut size={18} strokeWidth={2} />

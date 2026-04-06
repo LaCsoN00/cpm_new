@@ -62,7 +62,7 @@ export default function Register() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <img
-            src="/favicon.svg"
+            src="/icon-512x512.png"
             alt="Logo"
             style={{
               height: 80,

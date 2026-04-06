@@ -49,7 +49,7 @@ export default function Login() {
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
           <img
-            src="/favicon.svg"
+            src="/icon-512x512.png"
             alt="Logo"
             style={{
               height: 100,

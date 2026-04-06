@@ -5,10 +5,10 @@ export default function PageLoader() {
     <div className="cpm-page-loader-overlay">
       <div className="cpm-whirlwind-container">
         <div className="cpm-whirlwind" />
-        <img 
-          src="/favicon.svg" 
+        <img
+          src="/icon-256x256.png"
           className="cpm-loader-logo"
-          alt="Chargement..." 
+          alt="Chargement..."
         />
       </div>
     </div>

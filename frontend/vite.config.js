@@ -9,7 +9,7 @@ export default defineConfig({
     tailwindcss(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['favicon.ico', 'favicon.svg'],
+      includeAssets: ['favicon.ico', 'icon-512x512.png'],
       manifest: {
         name: 'CPM - Gestion de Projets',
         short_name: 'CPM',

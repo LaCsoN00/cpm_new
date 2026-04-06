@@ -95,7 +95,6 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
       </nav>
 
       <div style={{ padding: '0 8px', marginTop: 'auto', marginBottom: 24 }}>
-        {!isCollapsed && <div className="sidebar-category">{t('nav.other')}</div>}
         <button 
           onClick={handleLogout} 
           className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`} 

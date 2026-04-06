@@ -1,4 +1,4 @@
-import { Menu, Bell, Search, Check, Trash2, X } from 'lucide-react'
+import { Menu, Bell, BellOff, Search, Check, Trash2, X } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
@@ -7,6 +7,7 @@ import AvatarImage from './AvatarImage'
 import socket from '../services/socket'
 import { useLocation, useNavigate } from 'react-router-dom'
 import notificationService from '../services/notificationService'
+import { usePushNotifications } from '../hooks/usePushNotifications'
 
 export default function Navbar({ onMenuClick }) {
   const { t } = useTranslation()
@@ -19,6 +20,9 @@ export default function Navbar({ onMenuClick }) {
   const [notifications, setNotifications] = useState([])
   const notifRef = useRef(null)
   const userMenuRef = useRef(null)
+  const [isJiggling, setIsJiggling] = useState(false)
+  const audioRef = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'))
+  const { isSupported, subscription, subscribeUser, unsubscribeUser, loading: pushLoading } = usePushNotifications()
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -49,6 +53,13 @@ export default function Navbar({ onMenuClick }) {
       if (!data || data.userId === user?.id) {
         clearTimeout(timer)
         timer = setTimeout(fetchNotifs, 500)
+        
+        // Trigger visual and audio alert for new items
+        setIsJiggling(true)
+        setTimeout(() => setIsJiggling(false), 1000)
+        
+        audioRef.current.currentTime = 0
+        audioRef.current.play().catch(e => console.log('Audio play failed:', e))
       }
     }
 
@@ -163,16 +174,17 @@ export default function Navbar({ onMenuClick }) {
         {/* Notifs & Profile container */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ position: 'relative' }}>
-            <button
+             <button
               onClick={() => { setShowNotifs(!showNotifs); setShowUserMenu(false) }}
+              className={`navbar-bell-btn ${isJiggling ? 'bell-shake-animation' : ''}`}
               style={{
                 background: 'var(--surface-lowest)', border: 'none', cursor: 'pointer',
                 width: 44, height: 44, borderRadius: '50%',
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
-                position: 'relative', color: 'var(--text-muted)', boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
+                position: 'relative', color: '#D4AF37', boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
               }}
             >
-              <Bell size={20} />
+              <Bell size={20} className="bell-gold" />
               {unreadCount > 0 && (
                 <span style={{
                   position: 'absolute', top: 10, right: 10, minWidth: 16, height: 16, padding: '0 4px',
@@ -204,7 +216,33 @@ export default function Navbar({ onMenuClick }) {
                 }}
               >
                 <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', padding: '16px 20px', borderBottom: '1px solid #f8fafc' }}>
-                  <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>{t('nav.notifications')}</div>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                    <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>{t('nav.notifications')}</div>
+                    {isSupported && (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); subscription ? unsubscribeUser() : subscribeUser() }}
+                        disabled={pushLoading}
+                        title={subscription ? t('nav.disableNotifications') : t('nav.enableNotifications')}
+                        style={{ 
+                          background: subscription ? 'var(--primary-light)' : 'var(--bg-color)', 
+                          border: 'none', 
+                          cursor: 'pointer', 
+                          width: 30, 
+                          height: 30, 
+                          borderRadius: '50%', 
+                          display: 'flex', 
+                          alignItems: 'center', 
+                          justifyContent: 'center',
+                          color: subscription ? 'var(--primary)' : 'var(--text-muted)',
+                          transition: 'all 0.3s ease',
+                          opacity: pushLoading ? 0.6 : 1,
+                          boxShadow: subscription ? '0 2px 8px rgba(0, 119, 182, 0.15)' : 'none'
+                        }}
+                      >
+                        {subscription ? <Bell size={14} /> : <BellOff size={14} />}
+                      </button>
+                    )}
+                  </div>
                   <div style={{ display: 'flex', gap: 12 }}>
                     {unreadCount > 0 && (
                       <button onClick={handleMarkAllAsRead} style={{ fontSize: 12, color: 'var(--primary)', fontWeight: 700, background: 'transparent', border: 'none', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: 4 }}>

@@ -61,7 +61,7 @@ export default function Invoices() {
 
   const getStatusStyle = (status) => {
     switch (status) {
-      case 'PAID': return { background: '#f0fdf4', color: '#16a34a' }
+      case 'PAID': return { background: '#ecfeff', color: '#0891b2' }
       case 'APPROVED': return { background: '#eff6ff', color: '#1e40af' }
       case 'REJECTED': return { background: '#fef2f2', color: '#dc2626' }
       default: return { background: '#fffbeb', color: '#d97706' }
@@ -96,7 +96,7 @@ export default function Invoices() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 16, marginBottom: 24 }}>
           {[
             { label: t('invoices.totalBilled'), value: `${Math.round(totalAmount).toLocaleString(i18n.language === 'en' ? 'en-US' : 'fr-FR')} ${t('invoices.currency')}`, color: '#1e40af', bg: '#eff6ff', icon: FileText },
-            { label: t('invoices.amountCollected'), value: `${Math.round(paidAmount).toLocaleString(i18n.language === 'en' ? 'en-US' : 'fr-FR')} ${t('invoices.currency')}`, color: '#10b981', bg: '#f0fdf4', icon: FileText },
+            { label: t('invoices.amountCollected'), value: `${Math.round(paidAmount).toLocaleString(i18n.language === 'en' ? 'en-US' : 'fr-FR')} ${t('invoices.currency')}`, color: '#0891b2', bg: '#ecfeff', icon: FileText },
             { label: t('invoices.pending'), value: `${Math.round(totalAmount - paidAmount).toLocaleString(i18n.language === 'en' ? 'en-US' : 'fr-FR')} ${t('invoices.currency')}`, color: '#f59e0b', bg: '#fffbeb', icon: FileText },
             { label: t('invoices.totalCount'), value: invoices.length, color: '#6366f1', bg: '#f5f3ff', icon: FileText },
           ].map(({ label, value, color, bg, icon: Icon }) => (

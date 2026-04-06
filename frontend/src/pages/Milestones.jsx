@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
 
-const MS_COLORS = { ACHIEVED: { bg: '#f0fdf4', color: '#16a34a' }, NOT_ACHIEVED: { bg: '#fef2f2', color: '#dc2626' }, PENDING: { bg: '#fef3c7', color: '#d97706' } }
+const MS_COLORS = { ACHIEVED: { bg: '#ecfeff', color: '#0891b2' }, NOT_ACHIEVED: { bg: '#fef2f2', color: '#dc2626' }, PENDING: { bg: '#fef3c7', color: '#d97706' } }
 const EMPTY_FORM = { name: '', targetDate: '', status: 'PENDING', progress: 0, projectId: '' }
 
 export default function Milestones() {

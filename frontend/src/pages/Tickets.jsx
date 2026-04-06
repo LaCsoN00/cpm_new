@@ -11,10 +11,10 @@ import toast from 'react-hot-toast'
 const COLUMNS = [
   { key: 'OPEN', color: '#ef4444', bg: '#fef2f2' },
   { key: 'IN_PROGRESS', color: '#f59e0b', bg: '#fffbeb' },
-  { key: 'RESOLVED', color: '#10b981', bg: '#f0fdf4' },
+  { key: 'RESOLVED', color: '#0891b2', bg: '#ecfeff' },
 ]
 const PRIORITY_CONFIG = {
-  LOW: { color: '#10b981', icon: Minus },
+  LOW: { color: '#0891b2', icon: Minus },
   MEDIUM: { color: '#f59e0b', icon: AlertCircle },
   HIGH: { color: '#ef4444', icon: ArrowUp }
 }
@@ -328,7 +328,7 @@ export default function Tickets() {
                     onChange={e => setComment(e.target.value)}
                   />
                   <button type="submit" className="btn-primary-custom" disabled={loading || !comment.trim()} style={{ height: 40, padding: '0 16px', display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <SendHorizontal size={16} /> <span>{t('tickets.send') || "Envoyer"}</span>
+                    <SendHorizontal size={16} /> <span>{t('tickets.sendBtn') || "Envoyer"}</span>
                   </button>
                 </form>
               )}

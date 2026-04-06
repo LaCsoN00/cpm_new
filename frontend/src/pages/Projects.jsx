@@ -8,7 +8,7 @@ import useAuthStore from '../store/authStore'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 
-const STATUS_COLORS = { PLANNED: { bg: '#eff6ff', color: '#1e40af' }, IN_PROGRESS: { bg: '#fef3c7', color: '#d97706' }, COMPLETED: { bg: '#f0fdf4', color: '#16a34a' } }
+const STATUS_COLORS = { PLANNED: { bg: '#eff6ff', color: '#1e40af' }, IN_PROGRESS: { bg: '#fef3c7', color: '#d97706' }, COMPLETED: { bg: '#ecfeff', color: '#0891b2' } }
 
 const EMPTY_FORM = { name: '', description: '', startDate: '', endDate: '', status: 'PLANNED', responsible: '', clientId: '' }
 
@@ -212,7 +212,7 @@ export default function Projects() {
                   onClick={() => handleCopy(p.inviteCode)}
                   style={{
                     marginBottom: 16,
-                    background: 'linear-gradient(135deg, #003529, #0d4d3e)',
+                    background: 'linear-gradient(135deg, var(--primary), var(--primary-container))',
                     padding: '10px 16px',
                     borderRadius: 9999,
                     display: 'flex',
@@ -220,15 +220,15 @@ export default function Projects() {
                     justifyContent: 'space-between',
                     cursor: 'pointer',
                     transition: 'all 0.2s',
-                    boxShadow: '0 4px 14px rgba(0, 53, 41, 0.2)'
+                    boxShadow: '0 4px 14px rgba(0, 119, 182, 0.2)'
                   }}
                   onMouseEnter={e => e.currentTarget.style.transform = 'translateY(-1px)'}
                   onMouseLeave={e => e.currentTarget.style.transform = 'translateY(0)'}
                   title={t('projects.copyCode')}
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-                    <Key size={14} color="#b3efda" />
-                    <span style={{ color: '#b3efda', fontSize: 12, fontWeight: 600 }}>{t('projects.code')}</span>
+                    <Key size={14} color="var(--primary-light)" />
+                    <span style={{ color: 'var(--primary-light)', fontSize: 12, fontWeight: 600 }}>{t('projects.code')}</span>
                   </div>
                   <div style={{ display: 'flex', alignItems: 'center', gap: 8, overflow: 'hidden' }}>
                     <span style={{ fontFamily: 'monospace', color: 'white', fontSize: 13, fontWeight: 700, textOverflow: 'ellipsis', overflow: 'hidden', whiteSpace: 'nowrap', maxWidth: '120px' }}>{p.inviteCode}</span>

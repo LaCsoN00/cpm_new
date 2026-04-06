@@ -157,13 +157,15 @@ export default function Tickets() {
             />
           </div>
           {user?.role === 'COLLABORATOR' && (
-            <button className="btn-primary-custom" onClick={() => setShowModal(true)}><Plus size={18} /> {t('tickets.newTicket')}</button>
+            <button className="btn-primary-custom" onClick={() => setShowModal(true)}>
+              <Plus size={18} /> <span>{t('tickets.newTicket')}</span>
+            </button>
           )}
         </div>
       </div>
 
       {/* Kanban board */}
-      <div className="kanban-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+      <div className="kanban-grid">
         {COLUMNS.map(col => {
           const colTickets = filteredTickets.filter(t => t.status === col.key)
           const isExpanded = expandedCol === col.key
@@ -251,7 +253,9 @@ export default function Tickets() {
               </div>
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('tickets.cancel')}</button>
-                <button type="submit" className="btn-primary-custom" disabled={loading}>{loading ? t('tickets.creating') : t('tickets.createBtn')}</button>
+                <button type="submit" className="btn-primary-custom" disabled={loading}>
+                  <span>{loading ? t('tickets.creating') : t('tickets.createBtn')}</span>
+                </button>
               </div>
             </form>
           </div>
@@ -323,7 +327,9 @@ export default function Tickets() {
                     value={comment}
                     onChange={e => setComment(e.target.value)}
                   />
-                  <button type="submit" className="btn-primary-custom" disabled={loading || !comment.trim()} style={{ height: 40, padding: '0 16px' }}>{t('tickets.sendBtn') || "Envoyer"}</button>
+                  <button type="submit" className="btn-primary-custom" disabled={loading || !comment.trim()} style={{ height: 40, padding: '0 16px' }}>
+                    <span>{t('tickets.sendBtn') || "Envoyer"}</span>
+                  </button>
                 </form>
               )}
             </div>

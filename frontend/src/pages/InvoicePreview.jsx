@@ -379,7 +379,9 @@ export default function InvoicePreview() {
                 </div>
 
                 <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
-                  <button onClick={() => setShowPaymentModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>Annuler</button>
+                  <button onClick={() => setShowPaymentModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>
+                    <span>Annuler</span>
+                  </button>
                   <button
                     onClick={handlePayment}
                     disabled={!paymentMethod}
@@ -388,7 +390,7 @@ export default function InvoicePreview() {
                       fontWeight: 600, fontSize: 14, background: paymentMethod ? '#1e40af' : '#94a3b8', color: 'white'
                     }}
                   >
-                    Confirmer le paiement
+                    <span>Confirmer le paiement</span>
                   </button>
                 </div>
               </>

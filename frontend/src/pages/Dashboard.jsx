@@ -267,7 +267,7 @@ export default function Dashboard() {
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 }}>
               <h3 style={{ fontSize: 14, fontWeight: 800, color: 'var(--text-main)' }}>{t('dashboard.recentTickets')}</h3>
               <button className="btn-ghost-custom" onClick={() => navigate('/tickets')} style={{ padding: '4px 8px', fontSize: 11, display: 'flex', alignItems: 'center', gap: 4 }}>
-                {t('dashboard.viewAll')} <Filter size={12} />
+                <span>{t('dashboard.viewAll')}</span> <Filter size={12} />
               </button>
             </div>
             <div style={{ position: 'relative', marginBottom: 12 }}>

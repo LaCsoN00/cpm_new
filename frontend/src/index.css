@@ -648,11 +648,16 @@ h4,
     flex-direction: column;
     background: var(--surface-lowest);
     border-radius: 20px;
-    margin-bottom: 16px;
+    margin-bottom: 24px;
     padding: 16px;
     box-shadow: 0 4px 15px rgba(0, 53, 41, 0.05);
     border: 1px solid rgba(0, 0, 0, 0.04);
     transform: none !important;
+  }
+
+  .kanban-grid {
+    grid-template-columns: 1fr !important;
+    gap: 20px !important;
   }
 
   .table-custom td {
@@ -856,10 +861,9 @@ h4,
   width: 120px;
   height: 120px;
   object-fit: contain;
-  border-radius: 16px;
-  background: white;
-  padding: 12px;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 /* Kanban Mobile */

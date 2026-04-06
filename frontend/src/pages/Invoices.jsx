@@ -85,7 +85,9 @@ export default function Invoices() {
           <p className="page-subtitle">{t('invoices.subtitle', { count: invoices.length })}</p>
         </div>
         {user?.role === 'MANAGER' && (
-          <button className="btn-primary-custom" onClick={() => navigate('/invoices/new')}><Plus size={18} /> {t('invoices.newInvoice')}</button>
+          <button className="btn-primary-custom" onClick={() => navigate('/invoices/new')}>
+            <Plus size={18} /> <span>{t('invoices.newInvoice')}</span>
+          </button>
         )}
       </div>
 
@@ -126,7 +128,7 @@ export default function Invoices() {
             onClick={() => setFilter(key)}
             className={`filter-pill ${filter === key ? 'active' : ''}`}
           >
-            {label}
+            <span>{label}</span>
           </button>
         ))}
       </div>

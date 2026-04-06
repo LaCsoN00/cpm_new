@@ -78,7 +78,7 @@ export default function Clients() {
           </div>
         </div>
         {user?.role === 'MANAGER' && (
-          <button className="btn-primary-custom" onClick={openCreate}><UserPlus size={18} /> {t('clients.newClient')}</button>
+          <button className="btn-primary-custom" onClick={openCreate}><UserPlus size={18} /> <span>{t('clients.newClient')}</span></button>
         )}
       </div>
 
@@ -139,7 +139,9 @@ export default function Clients() {
               ))}
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end', marginTop: 6 }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('clients.cancel')}</button>
-                <button type="submit" className="btn-primary-custom" disabled={loading}>{loading ? t('clients.saving') : editClient ? t('clients.update') : t('clients.create')}</button>
+                <button type="submit" className="btn-primary-custom" disabled={loading}>
+                  <span>{loading ? t('clients.saving') : editClient ? t('clients.update') : t('clients.create')}</span>
+                </button>
               </div>
             </form>
           </div>

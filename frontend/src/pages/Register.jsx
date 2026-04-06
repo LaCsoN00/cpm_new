@@ -61,16 +61,16 @@ export default function Register() {
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <img 
-            src="/favicon.svg" 
-            alt="Logo" 
-            style={{ 
-              height: 80, 
-              width: 'auto', 
+          <img
+            src="/favicon.svg"
+            alt="Logo"
+            style={{
+              height: 80,
+              width: 'auto',
               display: 'block',
-              margin: '0 auto 16px', 
-              filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))' 
-            }} 
+              margin: '0 auto 16px',
+              filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))'
+            }}
           />
           <h1 style={{ fontSize: 32, fontWeight: 900, color: 'white', letterSpacing: '-1px', fontFamily: "'Manrope', sans-serif" }}>
             {t('register.title')}

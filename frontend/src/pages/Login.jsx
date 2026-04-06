@@ -48,16 +48,16 @@ export default function Login() {
       }}>
         {/* Logo */}
         <div style={{ textAlign: 'center', marginBottom: 40 }}>
-          <img 
-            src="/favicon.svg" 
-            alt="Logo" 
-            style={{ 
-              height: 100, 
-              width: 'auto', 
+          <img
+            src="/favicon.svg"
+            alt="Logo"
+            style={{
+              height: 100,
+              width: 'auto',
               display: 'block',
-              margin: '0 auto 24px', 
-              filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))' 
-            }} 
+              margin: '0 auto 24px',
+              filter: 'drop-shadow(0 10px 20px rgba(0,0,0,0.2))'
+            }}
           />
           <h1 style={{ fontSize: 36, fontWeight: 900, color: 'white', letterSpacing: '-1.5px', fontFamily: "'Manrope', sans-serif" }}>
             CPM<span style={{ opacity: 0.7 }}> Pro</span>

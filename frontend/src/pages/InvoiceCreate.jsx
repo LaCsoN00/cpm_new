@@ -90,7 +90,7 @@ export default function InvoiceCreate() {
           <h1 className="page-title">{t('invoiceCreate.title')}</h1>
         </div>
         <button className="btn-primary-custom" onClick={handleSubmit} disabled={loading}>
-          <FileText size={18} /> {loading ? t('invoiceCreate.creating') : t('invoiceCreate.createBtn')}
+          <FileText size={18} /> <span>{loading ? t('invoiceCreate.creating') : t('invoiceCreate.createBtn')}</span>
         </button>
       </div>
 
@@ -188,7 +188,9 @@ export default function InvoiceCreate() {
       <div className="card-custom" style={{ marginTop: 20 }}>
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
           <h3 style={{ fontSize: 14, fontWeight: 700, color: '#1e293b' }}>{t('invoiceCreate.itemsTitle')}</h3>
-          <button className="btn-primary-custom" style={{ padding: '7px 14px', fontSize: 13 }} onClick={addItem}><Plus size={15} /> {t('invoiceCreate.addItem')}</button>
+          <button className="btn-primary-custom" style={{ padding: '7px 14px', fontSize: 13 }} onClick={addItem}>
+            <Plus size={15} /> <span>{t('invoiceCreate.addItem')}</span>
+          </button>
         </div>
 
         <div className="invoice-items-container">

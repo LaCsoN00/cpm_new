@@ -99,7 +99,7 @@ export default function Milestones() {
           </div>
         </div>
         {user?.role === 'MANAGER' && (
-          <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> {t('milestones.newMs')}</button>
+          <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> <span>{t('milestones.newMs')}</span></button>
         )}
       </div>
 
@@ -185,7 +185,9 @@ export default function Milestones() {
               </div>
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('milestones.cancel')}</button>
-                <button type="submit" className="btn-primary-custom" disabled={loading}>{loading ? t('milestones.saving') : editMs ? t('milestones.update') : t('milestones.create')}</button>
+                <button type="submit" className="btn-primary-custom" disabled={loading}>
+                  <span>{loading ? t('milestones.saving') : editMs ? t('milestones.update') : t('milestones.create')}</span>
+                </button>
               </div>
             </form>
           </div>

@@ -152,11 +152,11 @@ export default function Projects() {
         <div style={{ display: 'flex', gap: 12 }}>
           {user?.role !== 'ADMIN' && (
             <button className="btn-primary-custom" onClick={() => setShowJoinModal(true)}>
-              <Key size={18} /> {t('projects.join')}
+              <Key size={18} /> <span>{t('projects.join')}</span>
             </button>
           )}
           {user?.role === 'MANAGER' && (
-            <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> {t('projects.newProject')}</button>
+            <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> <span>{t('projects.newProject')}</span></button>
           )}
         </div>
       </div>
@@ -173,7 +173,7 @@ export default function Projects() {
             onClick={() => setFilter(s)}
             className={`filter-pill ${filter === s ? 'active' : ''}`}
           >
-            {s === 'ALL' ? t('projects.all') : t(`projects.${s}`)}
+            <span>{s === 'ALL' ? t('projects.all') : t(`projects.${s}`)}</span>
           </button>
         ))}
       </div>
@@ -278,7 +278,7 @@ export default function Projects() {
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setShowJoinModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('projects.cancel')}</button>
                 <button type="submit" className="btn-primary-custom" disabled={loading}>
-                  {loading ? t('projects.verifying') : t('projects.joinBtn')}
+                  <span>{loading ? t('projects.verifying') : t('projects.joinBtn')}</span>
                 </button>
               </div>
             </form>
@@ -348,7 +348,7 @@ export default function Projects() {
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('projects.cancel')}</button>
                 <button type="submit" className="btn-primary-custom" disabled={loading}>
-                  {loading ? t('projects.saving') : editProject ? t('projects.update') : t('projects.createBtn')}
+                  <span>{loading ? t('projects.saving') : editProject ? t('projects.update') : t('projects.createBtn')}</span>
                 </button>
               </div>
             </form>

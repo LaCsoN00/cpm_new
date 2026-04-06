@@ -280,9 +280,11 @@ export default function Profile() {
               </div>
               <button type="submit" className="btn-primary-custom" disabled={saving} style={{ marginTop: 4 }}>
                 {saving ? (
-                  <>{t('profile.saving')}</>
+                  <span>{t('profile.saving')}</span>
                 ) : (
-                  <><Save size={16} /> {t('profile.save')}</>
+                  <>
+                    <Save size={16} /> <span>{t('profile.save')}</span>
+                  </>
                 )}
               </button>
             </form>
@@ -328,7 +330,7 @@ export default function Profile() {
                 )}
               </div>
               <button type="submit" className="btn-primary-custom" disabled={savingPw} style={{ marginTop: 4, background: 'linear-gradient(135deg, #dc2626, #b91c1c)' }}>
-                {savingPw ? t('profile.modifying') : <><Lock size={16} /> {t('profile.modifyPassword')}</>}
+                {savingPw ? <span>{t('profile.modifying')}</span> : <><Lock size={16} /> <span>{t('profile.modifyPassword')}</span></>}
               </button>
             </form>
           </div>

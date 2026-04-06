@@ -314,7 +314,7 @@ export default function Evaluations() {
                   {t('evaluations.cancel')}
                 </button>
                 <button type="submit" className="btn-primary-custom" disabled={loading}>
-                  {loading ? t('evaluations.saving') : editEval ? t('evaluations.update') : t('evaluations.create')}
+                  <span>{loading ? t('evaluations.saving') : editEval ? t('evaluations.update') : t('evaluations.create')}</span>
                 </button>
               </div>
             </form>

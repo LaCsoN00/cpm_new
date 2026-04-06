@@ -156,7 +156,7 @@ export default function ProjectDetail() {
           )}
         </div>
         {canModifyProject && (
-          <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> {t('projectDetail.addMs')}</button>
+          <button className="btn-primary-custom" onClick={openCreate}><Plus size={18} /> <span>{t('projectDetail.addMs')}</span></button>
         )}
       </div>
 
@@ -248,7 +248,9 @@ export default function ProjectDetail() {
               </div>
               <div style={{ display: 'flex', gap: 10, justifyContent: 'flex-end' }}>
                 <button type="button" onClick={() => setShowModal(false)} style={{ padding: '10px 20px', borderRadius: 10, border: '1.5px solid #e2e8f0', background: 'white', cursor: 'pointer', fontWeight: 600, fontSize: 14, color: '#64748b' }}>{t('projectDetail.cancel')}</button>
-                <button type="submit" className="btn-primary-custom" disabled={loading}>{loading ? t('projectDetail.saving') : editMs ? t('projectDetail.update') : t('projectDetail.create')}</button>
+                <button type="submit" className="btn-primary-custom" disabled={loading}>
+                  <span>{loading ? t('projectDetail.saving') : editMs ? t('projectDetail.update') : t('projectDetail.create')}</span>
+                </button>
               </div>
             </form>
           </div>

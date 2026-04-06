@@ -24,6 +24,7 @@ model User {
   createdProjects      Project[]      @relation("ProjectCreator")
   createdTickets       Ticket[]       @relation("TicketCreator")
   joinedProjects       Project[]      @relation("ProjectCollaborators")
+  pushSubscriptions    PushSubscription[]
 }
 
 model Project {
@@ -163,6 +164,18 @@ model Notification {
   user      User             @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId], map: "Notification_userId_fkey")
+}
+
+model PushSubscription {
+  id           Int      @id @default(autoincrement())
+  userId       Int
+  endpoint     String   @unique @db.VarChar(512)
+  p256dh       String   @db.VarChar(255)
+  auth         String   @db.VarChar(255)
+  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
 }
 
 enum Role {

@@ -1,5 +1,5 @@
-const { PrismaClient } = require('@prisma/client')
 const prisma = new PrismaClient()
+const { sendNotification } = require('./push')
 
 /**
  * Creates a notification for a specific user
@@ -26,6 +26,25 @@ const createNotification = async (io, userId, title, message, type = 'INFO') => 
         type
       }
     })
+
+    // Fetch user subscriptions for Web Push
+    const subscriptions = await prisma.pushSubscription.findMany({
+      where: { userId }
+    })
+
+    if (subscriptions.length > 0) {
+      // Logic for sounds: we send the payload, the Service Worker handles the rest
+      await sendNotification(subscriptions, {
+        title,
+        body: message,
+        icon: '/icon-192x192.png',
+        badge: '/favicon.ico',
+        tag: 'cpm-notification', // Collapse multiple notifications
+        data: {
+          url: '/' // Can be improved to link to the specific ticket/project
+        }
+      })
+    }
 
     // Emit socket event for real-time update
     if (io) {

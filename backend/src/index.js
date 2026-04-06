@@ -11,6 +11,7 @@ const clientRoutes = require('./routes/clients')
 const invoiceRoutes = require('./routes/invoices')
 const userRoutes = require('./routes/users')
 const notificationRoutes = require('./routes/notifications')
+const pushSubscriptionRoutes = require('./routes/pushSubscriptions')
 const path = require('path')
 const http = require('http')
 const { Server } = require('socket.io')
@@ -71,6 +72,7 @@ app.use('/api/clients', clientRoutes)
 app.use('/api/invoices', invoiceRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/notifications', notificationRoutes)
+app.use('/api/push-subscriptions', pushSubscriptionRoutes)
 
 // Error handler
 app.use((err, req, res, next) => {

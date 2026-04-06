@@ -1,10 +1,12 @@
 import { NavLink, useNavigate } from 'react-router-dom'
 import {
   LayoutDashboard, FolderKanban, Milestone, PieChart,
-  LifeBuoy, Users, FileText, Settings, LogOut, X, UserCheck
+  LifeBuoy, Users, FileText, Settings, LogOut, X, UserCheck,
+  Bell, BellOff
 } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
+import { usePushNotifications } from '../hooks/usePushNotifications'
 
 const navGroups = [
   {
@@ -29,6 +31,7 @@ const navGroups = [
 export default function Sidebar({ isOpen, isCollapsed, onClose }) {
   const { t } = useTranslation()
   const { logout, user } = useAuthStore()
+  const { isSupported, subscription, subscribeUser, unsubscribeUser, loading } = usePushNotifications()
   const navigate = useNavigate()
 
   const handleLogout = () => {
@@ -94,7 +97,31 @@ export default function Sidebar({ isOpen, isCollapsed, onClose }) {
         </div>
       </nav>
 
-      <div style={{ padding: '0 8px', marginTop: 'auto', marginBottom: 24 }}>
+      <div style={{ padding: '0 8px', marginTop: 'auto', marginBottom: 8 }}>
+        {isSupported && (
+          <button
+            onClick={subscription ? unsubscribeUser : subscribeUser}
+            disabled={loading}
+            className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`}
+            style={{
+              width: '100%',
+              border: 'none',
+              background: 'transparent',
+              textAlign: 'left',
+              cursor: 'pointer',
+              color: subscription ? '#0891b2' : '#64748b',
+              opacity: loading ? 0.6 : 1,
+              fontFamily: 'inherit'
+            }}
+            title={subscription ? t('nav.disableNotifications') : t('nav.enableNotifications')}
+          >
+            {subscription ? <Bell size={18} strokeWidth={2} /> : <BellOff size={18} strokeWidth={2} />}
+            {!isCollapsed && <span>{subscription ? t('nav.notificationsActive') : t('nav.enableNotifications')}</span>}
+          </button>
+        )}
+      </div>
+
+      <div style={{ padding: '0 8px', marginTop: 0, marginBottom: 24 }}>
         <button
           onClick={handleLogout}
           className={`sidebar-link ${isCollapsed ? 'collapsed' : ''}`}

@@ -45,7 +45,10 @@ const resources = {
         clearAll: "Tout effacer",
         delete: "Supprimer",
         confirmDeleteAll: "Voulez-vous vraiment supprimer toutes vos notifications ?",
-        usersAccess: "Accès & Utilisateurs"
+        usersAccess: "Accès & Utilisateurs",
+        enableNotifications: "Activer Notifications",
+        disableNotifications: "Désactiver Notifications",
+        notificationsActive: "Notifications Actives"
       },
       dashboard: {
         totalProjects: "Total Projets",
@@ -540,7 +543,10 @@ const resources = {
         clearAll: "Clear all",
         delete: "Delete",
         confirmDeleteAll: "Are you sure you want to delete all your notifications?",
-        usersAccess: "Access & Users"
+        usersAccess: "Access & Users",
+        enableNotifications: "Enable Notifications",
+        disableNotifications: "Disable Notifications",
+        notificationsActive: "Notifications Active"
       },
       dashboard: {
         totalProjects: "Total Projects",

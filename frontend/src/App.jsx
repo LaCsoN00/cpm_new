@@ -35,16 +35,26 @@ function AdminRoute({ children }) {
 
 function NavigationLoader() {
   const location = useLocation()
-  const { startLoading, stopLoading, loadingCount } = useUIStore()
+  const startLoading = useUIStore(s => s.startLoading)
+  const stopLoading = useUIStore(s => s.stopLoading)
+  const loadingCount = useUIStore(s => s.loadingCount)
 
   useEffect(() => {
-    // Show loader for at least 500ms on every route change to ensure smooth transition
-    startLoading()
+    // Avoid showing loader for very fast transitions or if multiple redirects happen
     const timer = setTimeout(() => {
+      startLoading()
+    }, 50) // Small delay before showing loader to avoid flicker
+
+    const stopTimer = setTimeout(() => {
       stopLoading()
-    }, 500)
-    return () => clearTimeout(timer)
-  }, [location.pathname, startLoading, stopLoading])
+    }, 600) // Ensure it stops after a reasonable time
+
+    return () => {
+      clearTimeout(timer)
+      clearTimeout(stopTimer)
+      // We don't call stopLoading here because it might have already been called or the next route will handle its own loading
+    }
+  }, [location.pathname]) // Only depend on pathname
 
   return loadingCount > 0 ? <PageLoader /> : null
 }

@@ -1,0 +1,18 @@
+[dotenv@17.3.1] injecting env (7) from .env -- tip: ­ƒöÉ prevent building .env in docker: https://dotenvx.com/prebuild
+C:\Users\lucmo\Desktop\cpmnew\backend\node_modules\router\lib\route.js:228
+        throw new TypeError('argument handler must be a function')
+        ^
+
+TypeError: argument handler must be a function
+    at Route.<computed> [as post] (C:\Users\lucmo\Desktop\cpmnew\backend\node_modules\router\lib\route.js:228:15)
+    at Router.<computed> [as post] (C:\Users\lucmo\Desktop\cpmnew\backend\node_modules\router\index.js:448:19)
+    at Object.<anonymous> (C:\Users\lucmo\Desktop\cpmnew\backend\src\routes\pushSubscriptions.js:9:8)
+    at Module._compile (node:internal/modules/cjs/loader:1706:14)
+    at Object..js (node:internal/modules/cjs/loader:1839:10)
+    at Module.load (node:internal/modules/cjs/loader:1441:32)
+    at Function._load (node:internal/modules/cjs/loader:1263:12)
+    at TracingChannel.traceSync (node:diagnostics_channel:322:14)
+    at wrapModuleLoad (node:internal/modules/cjs/loader:237:24)
+    at Module.require (node:internal/modules/cjs/loader:1463:12)
+
+Node.js v22.20.0

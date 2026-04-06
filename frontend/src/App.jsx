@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import useAuthStore from './store/authStore'
 import useUIStore from './store/uiStore'
@@ -35,34 +35,24 @@ function AdminRoute({ children }) {
 
 function NavigationLoader() {
   const location = useLocation()
-  const startLoading = useUIStore(s => s.startLoading)
-  const stopLoading = useUIStore(s => s.stopLoading)
-  const loadingCount = useUIStore(s => s.loadingCount)
+  const [visible, setVisible] = useState(false)
 
   useEffect(() => {
-    // Avoid showing loader for very fast transitions or if multiple redirects happen
-    const timer = setTimeout(() => {
-      startLoading()
-    }, 50) // Small delay before showing loader to avoid flicker
+    setVisible(true)
+    const timer = setTimeout(() => setVisible(false), 500)
+    return () => clearTimeout(timer)
+  }, [location.pathname])
 
-    const stopTimer = setTimeout(() => {
-      stopLoading()
-    }, 600) // Ensure it stops after a reasonable time
-
-    return () => {
-      clearTimeout(timer)
-      clearTimeout(stopTimer)
-      // We don't call stopLoading here because it might have already been called or the next route will handle its own loading
-    }
-  }, [location.pathname]) // Only depend on pathname
-
-  return loadingCount > 0 ? <PageLoader /> : null
+  return visible ? <PageLoader /> : null
 }
 
 export default function App() {
+  const loadingCount = useUIStore(s => s.loadingCount)
+  
   return (
     <BrowserRouter>
       <NavigationLoader />
+      {loadingCount > 0 && <PageLoader />}
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

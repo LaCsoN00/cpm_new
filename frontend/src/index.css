@@ -939,9 +939,9 @@ h4,
   align-items: center;
   justify-content: center;
   z-index: 99999;
-  background-color: rgba(0, 0, 0, 0.85); /* Much darker to prevent reading */
-  backdrop-filter: blur(80px); /* Massive blur */
-  -webkit-backdrop-filter: blur(80px);
+  background-color: rgba(255, 255, 255, 0.45); /* LIGHT and transparent background as promised */
+  backdrop-filter: blur(100px); /* Massive blur so we can't read anything */
+  -webkit-backdrop-filter: blur(100px);
   transition: opacity 0.3s ease;
 }
 

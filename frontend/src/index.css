@@ -726,6 +726,118 @@ h4,
   }
 }
 
+/* --- Invoice Preview Responsive --- */
+.invoice-card {
+  width: 100%;
+  max-width: 850px;
+  margin: 0 auto;
+  background: white;
+  min-height: 1100px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+  border-radius: 24px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.invoice-header-section {
+  padding: 48px 36px;
+  border-bottom: 1px solid #f1f5f9;
+  position: relative;
+  z-index: 1;
+}
+
+.invoice-header-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+}
+
+.invoice-header-info {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  gap: 24px;
+}
+
+.invoice-table-wrapper {
+  padding: 24px 36px;
+  position: relative;
+  z-index: 1;
+  flex: 1;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.invoice-totals-section {
+  display: flex;
+  justify-content: space-between;
+  padding: 24px 36px;
+  align-items: flex-end;
+  margin-top: auto;
+  position: relative;
+  z-index: 1;
+}
+
+.invoice-totals-box {
+  width: 280px;
+  background: #f8fafc;
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Mobile specific overrides */
+@media (max-width: 640px) {
+  .invoice-card {
+    min-height: auto;
+    border-radius: 16px;
+    margin-bottom: 20px;
+  }
+
+  .invoice-header-section {
+    padding: 24px 20px;
+  }
+
+  .invoice-header-top {
+    flex-direction: column;
+  }
+
+  .invoice-header-info {
+    flex-direction: column;
+    margin-top: 24px;
+  }
+
+  .invoice-header-info > div:last-child {
+    text-align: left !important;
+  }
+
+  .invoice-table-wrapper {
+    padding: 16px;
+    margin: 0 -4px;
+  }
+
+  .invoice-table-wrapper table {
+    min-width: 450px; /* Force scroll but ensure layout holds */
+  }
+
+  .invoice-totals-section {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 24px 20px;
+    gap: 24px;
+  }
+
+  .invoice-totals-box {
+    width: 100%;
+  }
+
+  .hide-text-mobile {
+    display: none !important;
+  }
+}
+
 /* Kanban Mobile */
 @media (max-width: 768px) {
   .kanban-grid {

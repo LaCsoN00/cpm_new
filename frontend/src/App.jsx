@@ -1,6 +1,9 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import useAuthStore from './store/authStore'
+import useUIStore from './store/uiStore'
 import useSettingsStore from './store/settingsStore'
+import PageLoader from './components/PageLoader'
 import MainLayout from './layouts/MainLayout'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -30,9 +33,26 @@ function AdminRoute({ children }) {
   return children
 }
 
+function NavigationLoader() {
+  const location = useLocation()
+  const { startLoading, stopLoading, loadingCount } = useUIStore()
+
+  useEffect(() => {
+    // Show loader for at least 500ms on every route change to ensure smooth transition
+    startLoading()
+    const timer = setTimeout(() => {
+      stopLoading()
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [location.pathname, startLoading, stopLoading])
+
+  return loadingCount > 0 ? <PageLoader /> : null
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <NavigationLoader />
       <Routes>
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />

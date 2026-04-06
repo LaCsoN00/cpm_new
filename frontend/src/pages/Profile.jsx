@@ -141,10 +141,6 @@ export default function Profile() {
     return 'linear-gradient(135deg, #f59e0b, #d97706)' // Collaborator / Client
   }
 
-  if (loading) {
-    return <PageLoader />
-  }
-
   return (
     <ErrorBoundary>
       <div style={{ maxWidth: 900, margin: '0 auto' }}>

@@ -84,8 +84,6 @@ export default function Users() {
     }
   }
 
-  if (loading) return <PageLoader />
-
   return (
     <div>
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 24, flexWrap: 'wrap', gap: 12 }}>

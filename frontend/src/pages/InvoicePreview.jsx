@@ -108,7 +108,7 @@ export default function InvoicePreview() {
     toast.success('Paiement effectué avec succès !')
   }
 
-  if (!invoice) return <PageLoader />
+  if (!invoice) return null // Handled by global PageLoader
 
   const getStatusDisplay = () => {
     switch (invoice.status) {

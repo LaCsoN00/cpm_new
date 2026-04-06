@@ -1,5 +1,6 @@
 import axios from 'axios'
 import toast from 'react-hot-toast'
+import useUIStore from '../store/uiStore'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
@@ -13,12 +14,17 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('cpm_token')
   if (token) config.headers.Authorization = `Bearer ${token}`
+  useUIStore.getState().startLoading()
   return config
 })
 
 api.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    useUIStore.getState().stopLoading()
+    return res
+  },
   (err) => {
+    useUIStore.getState().stopLoading()
     const msg = err.response?.data?.message || 'Une erreur est survenue'
     const isLogin = err.config?.url?.includes('/auth/login')
     

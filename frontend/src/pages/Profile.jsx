@@ -7,6 +7,7 @@ import useAuthStore from '../store/authStore'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import ErrorBoundary from '../components/ErrorBoundary'
+import PageLoader from '../components/PageLoader'
 import i18n from '../i18n'
 
 export default function Profile() {
@@ -141,11 +142,7 @@ export default function Profile() {
   }
 
   if (loading) {
-    return (
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '50vh', color: '#94a3b8', fontSize: 14 }}>
-        {t('profile.loading')}
-      </div>
-    )
+    return <PageLoader />
   }
 
   return (

@@ -6,6 +6,7 @@ import socket from '../services/socket'
 import toast from 'react-hot-toast'
 import useAuthStore from '../store/authStore'
 import { useTranslation } from 'react-i18next'
+import PageLoader from '../components/PageLoader'
 
 const MS_COLORS = { ACHIEVED: { bg: '#f0fdf4', color: '#16a34a', icon: CheckCircle }, NOT_ACHIEVED: { bg: '#fef2f2', color: '#dc2626', icon: XCircle }, PENDING: { bg: '#fef3c7', color: '#d97706', icon: Clock } }
 const EMPTY_MS = { name: '', targetDate: '', status: 'PENDING', progress: 0 }
@@ -115,7 +116,7 @@ export default function ProjectDetail() {
     ? Math.round(milestones.reduce((a, m) => a + (m.progress || 0), 0) / milestones.length)
     : 0
 
-  if (!project) return <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>{t('projectDetail.loading')}</div>
+  if (!project) return <PageLoader />
 
   return (
     <div>

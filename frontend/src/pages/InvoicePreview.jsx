@@ -8,6 +8,7 @@ import useSettingsStore from '../store/settingsStore'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
 import useAuthStore from '../store/authStore'
+import PageLoader from '../components/PageLoader'
 
 // Helper: format number without decimals
 const fmt = (v) => {
@@ -107,7 +108,7 @@ export default function InvoicePreview() {
     toast.success('Paiement effectué avec succès !')
   }
 
-  if (!invoice) return <div style={{ textAlign: 'center', padding: 60, color: '#94a3b8' }}>{t('invoicePreview.loading')}</div>
+  if (!invoice) return <PageLoader />
 
   const getStatusDisplay = () => {
     switch (invoice.status) {

@@ -14,6 +14,7 @@ import socket from '../services/socket'
 import useUIStore from '../store/uiStore'
 import useAuthStore from '../store/authStore'
 import ErrorBoundary from '../components/ErrorBoundary'
+import PageLoader from '../components/PageLoader'
 import i18n from '../i18n'
 
 export default function Dashboard() {
@@ -186,6 +187,7 @@ export default function Dashboard() {
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+      {loading && <PageLoader />}
 
       <div style={{ flex: 1, minWidth: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
 

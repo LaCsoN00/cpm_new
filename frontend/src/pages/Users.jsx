@@ -7,6 +7,7 @@ import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
 import useAuthStore from '../store/authStore'
 import { useNavigate } from 'react-router-dom'
+import PageLoader from '../components/PageLoader'
 
 export default function Users() {
   const { t } = useTranslation()
@@ -83,7 +84,7 @@ export default function Users() {
     }
   }
 
-  if (loading) return <div style={{ padding: 40, color: '#94a3b8' }}>{t('users.loading')}</div>
+  if (loading) return <PageLoader />
 
   return (
     <div>

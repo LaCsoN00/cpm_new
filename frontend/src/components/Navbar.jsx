@@ -21,6 +21,7 @@ export default function Navbar({ onMenuClick }) {
   const notifRef = useRef(null)
   const userMenuRef = useRef(null)
   const [isJiggling, setIsJiggling] = useState(false)
+  const [isToggleJiggling, setIsToggleJiggling] = useState(false)
   const audioRef = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'))
   const { isSupported, subscription, subscribeUser, unsubscribeUser, loading: pushLoading } = usePushNotifications()
 
@@ -125,6 +126,18 @@ export default function Navbar({ onMenuClick }) {
     setSearch('')
   }
 
+  const handleTogglePush = async (e) => {
+    e.stopPropagation()
+    setIsToggleJiggling(true)
+    setTimeout(() => setIsToggleJiggling(false), 800)
+    
+    if (subscription) {
+      await unsubscribeUser()
+    } else {
+      await subscribeUser()
+    }
+  }
+
   return (
     <header className="navbar-custom">
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
@@ -220,26 +233,30 @@ export default function Navbar({ onMenuClick }) {
                     <div style={{ fontWeight: 800, fontSize: 14, color: 'var(--text-main)' }}>{t('nav.notifications')}</div>
                     {isSupported && (
                       <button
-                        onClick={(e) => { e.stopPropagation(); subscription ? unsubscribeUser() : subscribeUser() }}
+                        onClick={handleTogglePush}
                         disabled={pushLoading}
                         title={subscription ? t('nav.disableNotifications') : t('nav.enableNotifications')}
+                        className={isToggleJiggling ? 'bell-shake-animation' : ''}
                         style={{ 
-                          background: subscription ? 'var(--primary-light)' : 'var(--bg-color)', 
+                          background: subscription ? 'rgba(212, 175, 55, 0.1)' : 'var(--bg-color)', 
                           border: 'none', 
                           cursor: 'pointer', 
-                          width: 30, 
-                          height: 30, 
+                          width: 32, 
+                          height: 32, 
                           borderRadius: '50%', 
                           display: 'flex', 
                           alignItems: 'center', 
                           justifyContent: 'center',
-                          color: subscription ? 'var(--primary)' : 'var(--text-muted)',
-                          transition: 'all 0.3s ease',
+                          color: subscription ? '#D4AF37' : 'var(--text-muted)',
+                          transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
                           opacity: pushLoading ? 0.6 : 1,
-                          boxShadow: subscription ? '0 2px 8px rgba(0, 119, 182, 0.15)' : 'none'
+                          boxShadow: subscription ? '0 4px 12px rgba(212, 175, 55, 0.15)' : 'none',
+                          outline: 'none'
                         }}
+                        onMouseEnter={e => { if (!pushLoading) e.currentTarget.style.transform = 'scale(1.15) rotate(15deg)' }}
+                        onMouseLeave={e => { if (!pushLoading) e.currentTarget.style.transform = 'scale(1) rotate(0)' }}
                       >
-                        {subscription ? <Bell size={14} /> : <BellOff size={14} />}
+                        {subscription ? <Bell size={14} className="bell-gold" /> : <BellOff size={14} />}
                       </button>
                     )}
                   </div>

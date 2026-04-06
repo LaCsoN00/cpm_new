@@ -193,7 +193,16 @@ export default function InvoicePreview() {
               <Trash2 size={15} /> <span className="hide-text-mobile">{t('invoicePreview.delete') || 'Supprimer'}</span>
             </button>
           )}
-          <button className="btn-primary-custom" onClick={() => window.print()}>
+          <button 
+            className="btn-primary-custom" 
+            onClick={() => window.print()}
+            disabled={invoice.status === 'PENDING'}
+            style={{ 
+              opacity: invoice.status === 'PENDING' ? 0.5 : 1,
+              cursor: invoice.status === 'PENDING' ? 'not-allowed' : 'pointer'
+            }}
+            title={invoice.status === 'PENDING' ? 'Veuillez valider la facture avant d\'imprimer' : ''}
+          >
             <Printer size={18} /> <span className="hide-text-mobile">{t('invoicePreview.print')}</span>
           </button>
         </div>
@@ -209,37 +218,47 @@ export default function InvoicePreview() {
           )}
           {/* Header */}
           <div className="invoice-header-section">
-            <div className="invoice-header-top">
-              <div>
-                <p style={{ fontSize: 'clamp(24px, 5vw, 32px)', fontWeight: 900, color: '#1e3a8a', letterSpacing: -1 }}>{t('invoicePreview.invoiceLabel', { defaultValue: 'INVOICE' }).toUpperCase()}</p>
-                <p style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>#{invoice.number}</p>
-              </div>
-              <div className="no-print">
-                <button onClick={() => window.print()} className="btn-primary-custom" style={{ padding: '8px 20px', fontSize: 13 }}>
-                  <Printer size={16} /> <span className="hide-text-mobile">{t('invoicePreview.printBtn', { defaultValue: 'Print' })}</span>
-                </button>
+            <div className="invoice-header-centered">
+              {companyLogo && (
+                <img src={companyLogo} alt="Logo" className="invoice-logo-large" />
+              )}
+              <div style={{ textAlign: 'center' }}>
+                <p style={{ fontSize: 'clamp(28px, 6vw, 40px)', fontWeight: 900, color: '#1e3a8a', letterSpacing: -1, textTransform: 'uppercase' }}>
+                  {i18n.language === 'fr' ? 'FACTURE' : (t('invoicePreview.invoiceLabel', { defaultValue: 'INVOICE' }))}
+                </p>
+                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10, marginTop: 4 }}>
+                  <p style={{ fontSize: 13, color: '#64748b', fontWeight: 600 }}>#{invoice.number}</p>
+                  <span style={{
+                    padding: '4px 12px', borderRadius: 40, fontWeight: 700, fontSize: 11,
+                    background: statusDisplay.bg,
+                    color: statusDisplay.color
+                  }}>
+                    {statusDisplay.label.toUpperCase()}
+                  </span>
+                </div>
               </div>
             </div>
 
-            <div className="invoice-header-info">
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                {companyLogo && (
-                  <img src={companyLogo} alt="Logo" style={{ width: 56, height: 56, objectFit: 'contain', borderRadius: 10, background: 'white', padding: 6 }} />
-                )}
-                <div>
-                  <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.5px' }}>{companyInfo.name || 'CPM Pro'}</div>
-                  <div style={{ fontSize: 13, color: '#64748b', marginTop: 4 }}>{companyInfo.address || ''}</div>
-                  <div style={{ fontSize: 12, color: '#64748b', marginTop: 4 }}>{companyInfo.phone || ''} • {companyInfo.email || ''}</div>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 40, gap: 24, flexWrap: 'wrap' }}>
+              {/* Company Info */}
+              <div style={{ minWidth: 200 }}>
+                <p style={{ fontSize: 12, fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{t('invoicePreview.from', { defaultValue: 'Émetteur' })}</p>
+                <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.5px', color: '#1e293b' }}>{companyInfo.name || 'CPM Pro'}</div>
+                <div style={{ fontSize: 13, color: '#64748b', marginTop: 6, lineHeight: 1.5 }}>
+                  <p>{companyInfo.address || ''}</p>
+                  <p>{companyInfo.phone || ''}</p>
+                  <p>{companyInfo.email || ''}</p>
                 </div>
               </div>
-              <div style={{ textAlign: 'right' }}>
-                <span style={{
-                  padding: '8px 20px', borderRadius: 40, fontWeight: 700, fontSize: 13,
-                  background: statusDisplay.bg,
-                  color: statusDisplay.color
-                }}>
-                  {statusDisplay.label}
-                </span>
+
+              {/* Billed To Info (Moved to Header) */}
+              <div style={{ minWidth: 200, textAlign: 'right' }}>
+                <p style={{ fontSize: 12, fontWeight: 800, color: '#1e3a8a', textTransform: 'uppercase', letterSpacing: 1, marginBottom: 8 }}>{t('invoicePreview.billedTo')}</p>
+                <div style={{ fontSize: 18, fontWeight: 900, letterSpacing: '-0.5px', color: '#1e293b' }}>{invoice.client?.name}</div>
+                <div style={{ fontSize: 13, color: '#64748b', marginTop: 6, lineHeight: 1.5 }}>
+                  <p>{invoice.client?.email}</p>
+                  <p>{t('invoicePreview.invoiceDate', { defaultValue: 'Date' })} : {new Date(invoice.date).toLocaleDateString(i18n.language === 'fr' ? 'fr-FR' : 'en-US')}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -278,11 +297,7 @@ export default function InvoicePreview() {
           {/* Totals */}
           <div className="invoice-totals-section">
               <div style={{ flex: 1 }}>
-                <p style={{ fontSize: 14, fontWeight: 800, color: '#1e293b', marginBottom: 4 }}>{t('invoicePreview.billedTo')}</p>
-                <div style={{ fontSize: 13, color: '#475569', lineHeight: 1.5 }}>
-                  <p style={{ fontWeight: 700, color: '#1e293b', fontSize: 14 }}>{invoice.client?.name}</p>
-                  <p>{invoice.client?.email}</p>
-                </div>
+                {/* Empty space where customer info used to be */}
               </div>
               <div className="invoice-totals-box">
                 {[

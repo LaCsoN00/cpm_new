@@ -1,6 +1,7 @@
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import useUIStore from '../store/uiStore'
+import { mockHandler } from './apiMock'
 
 const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',
@@ -14,17 +15,30 @@ const api = axios.create({
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem('cpm_token')
   if (token) config.headers.Authorization = `Bearer ${token}`
+
+  // ── Demo Mode: intercept before network ──
+  if (localStorage.getItem('cpm_demo_mode') === 'true') {
+    // Return a custom adapter that routes through the mock handler
+    config.adapter = () => mockHandler(config)
+    // Skip loading indicator for instant mock responses
+    return config
+  }
+
   useUIStore.getState().startLoading()
   return config
 })
 
 api.interceptors.response.use(
   (res) => {
-    useUIStore.getState().stopLoading()
+    if (localStorage.getItem('cpm_demo_mode') !== 'true') {
+      useUIStore.getState().stopLoading()
+    }
     return res
   },
   (err) => {
-    useUIStore.getState().stopLoading()
+    if (localStorage.getItem('cpm_demo_mode') !== 'true') {
+      useUIStore.getState().stopLoading()
+    }
     const msg = err.response?.data?.message || 'Une erreur est survenue'
     const isLogin = err.config?.url?.includes('/auth/login')
     

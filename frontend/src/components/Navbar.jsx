@@ -1,4 +1,4 @@
-import { Menu, Bell, BellOff, Search, Check, Trash2, X } from 'lucide-react'
+import { Menu, Bell, BellOff, Search, Check, Trash2, X, Zap, RotateCcw } from 'lucide-react'
 import { useState, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import i18n from '../i18n'
@@ -8,6 +8,7 @@ import socket from '../services/socket'
 import { useLocation, useNavigate } from 'react-router-dom'
 import notificationService from '../services/notificationService'
 import { usePushNotifications } from '../hooks/usePushNotifications'
+import { resetDemoData } from '../services/apiMock'
 
 export default function Navbar({ onMenuClick }) {
   const { t } = useTranslation()
@@ -24,6 +25,14 @@ export default function Navbar({ onMenuClick }) {
   const [isToggleJiggling, setIsToggleJiggling] = useState(false)
   const audioRef = useRef(new Audio('https://assets.mixkit.co/active_storage/sfx/2358/2358-preview.mp3'))
   const { isSupported, subscription, subscribeUser, unsubscribeUser, loading: pushLoading } = usePushNotifications()
+  const [isDemo] = useState(() => localStorage.getItem('cpm_demo_mode') === 'true')
+
+  const handleResetDemo = (e) => {
+    e.stopPropagation()
+    if (!window.confirm('Reinitialiser les donnees de demonstration ? Toutes vos modifications seront perdues.')) return
+    resetDemoData()
+    window.location.reload()
+  }
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -184,6 +193,21 @@ export default function Navbar({ onMenuClick }) {
       {/* Right side Container */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
 
+        {/* Demo mode badge */}
+        {isDemo && (
+          <div style={{
+            display: 'flex', alignItems: 'center', gap: 6,
+            background: 'linear-gradient(135deg, #0f172a, #1e3a5f)',
+            borderRadius: 20, padding: '5px 12px',
+            border: '1px solid rgba(0,119,182,0.4)',
+            boxShadow: '0 2px 10px rgba(0,119,182,0.2)',
+            flexShrink: 0,
+          }}>
+            <Zap size={12} color="#fbbf24" fill="#fbbf24" />
+            <span style={{ fontSize: 11, fontWeight: 700, color: 'white', letterSpacing: '0.5px' }}>MODE DEMO</span>
+          </div>
+        )}
+
         {/* Notifs & Profile container */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
           <div style={{ position: 'relative' }}>
@@ -337,9 +361,29 @@ export default function Navbar({ onMenuClick }) {
                 {user?.role === 'ADMIN' && (
                   <div onClick={() => { navigate('/settings'); setShowUserMenu(false) }} style={{ padding: '10px 16px', fontSize: 13, fontWeight: 600, cursor: 'pointer', borderRadius: 12, color: 'var(--text-main)' }} onMouseEnter={e => e.currentTarget.style.background = 'var(--bg-color)'} onMouseLeave={e => e.currentTarget.style.background = 'transparent'}>{t('nav.settings')}</div>
                 )}
+                {isDemo && (
+                  <>
+                    <div style={{ margin: '8px 0', borderTop: '1px solid #f1f5f9' }} />
+                    <div
+                      onClick={handleResetDemo}
+                      style={{ padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', borderRadius: 12, color: '#0077b6', display: 'flex', alignItems: 'center', gap: 8 }}
+                      onMouseEnter={e => e.currentTarget.style.background = '#eff6ff'}
+                      onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
+                    >
+                      <RotateCcw size={14} /> Reinitialiser les donnees
+                    </div>
+                  </>
+                )}
                 <div style={{ margin: '8px 0', borderTop: '1px solid #f1f5f9' }} />
                 <div
-                  onClick={() => { useAuthStore.getState().logout(); navigate('/login') }}
+                  onClick={() => {
+                    if (isDemo) {
+                      localStorage.removeItem('cpm_demo_mode')
+                      localStorage.removeItem('cpm_demo_db')
+                    }
+                    useAuthStore.getState().logout()
+                    navigate('/login')
+                  }}
                   style={{ padding: '10px 16px', fontSize: 13, fontWeight: 700, cursor: 'pointer', borderRadius: 12, color: '#ef4444' }}
                   onMouseEnter={e => e.currentTarget.style.background = '#fef2f2'}
                   onMouseLeave={e => e.currentTarget.style.background = 'transparent'}

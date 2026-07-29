@@ -1,9 +1,10 @@
 import { useState } from 'react'
-import { useNavigate, Link } from 'react-router-dom'
-import { LogIn, Eye, EyeOff } from 'lucide-react'
+import { useNavigate, Link, useLocation } from 'react-router-dom'
+import { LogIn, Eye, EyeOff, Zap } from 'lucide-react'
 import useAuthStore from '../store/authStore'
 import toast from 'react-hot-toast'
 import { useTranslation } from 'react-i18next'
+import { resetDemoData } from '../services/apiMock'
 
 export default function Login() {
   const { t } = useTranslation()
@@ -11,8 +12,43 @@ export default function Login() {
   const [password, setPassword] = useState('')
   const [showPwd, setShowPwd] = useState(false)
   const [loading, setLoading] = useState(false)
-  const { login } = useAuthStore()
+  const { login, setUser } = useAuthStore()
   const navigate = useNavigate()
+  const location = useLocation()
+
+  // Show demo button ONLY if:
+  // 1. URL search has ?demo=true
+  // 2. Or VITE_DEMO_ONLY env var is enabled
+  // 3. Or a demo mode is already active
+  const queryParams = new URLSearchParams(location.search)
+  const showDemo = queryParams.get('demo') === 'true' || 
+                   import.meta.env.VITE_DEMO_ONLY === 'true' || 
+                   localStorage.getItem('cpm_demo_mode') === 'true'
+
+  const launchDemo = () => {
+    // Reset demo data to factory defaults
+    resetDemoData()
+    // Set demo mode flag
+    localStorage.setItem('cpm_demo_mode', 'true')
+    // Set a mock JWT token for user ID 1 (Admin Demo)
+    const demoToken = 'demo_token_1'
+    localStorage.setItem('cpm_token', demoToken)
+    // Set the user in the Zustand auth store directly
+    const demoUser = {
+      id: 1, name: 'Admin Demo', email: 'demo@cpm.com',
+      avatar: null, role: 'ADMIN',
+      emailNotifications: true, browserNotifications: false,
+      isApproved: true, createdAt: '2025-01-15T08:00:00.000Z',
+    }
+    setUser(demoUser)
+    // Also persist the token so the store keeps it
+    localStorage.setItem('cpm-auth', JSON.stringify({
+      state: { user: demoUser, token: demoToken, isAuthenticated: true },
+      version: 0
+    }))
+    toast.success('Mode Demo actif ! Explorez librement.')
+    navigate('/dashboard')
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault()
@@ -151,6 +187,57 @@ export default function Login() {
             {t('login.signup')}
           </Link>
         </div>
+
+        {/* ── Demo Mode Card ── */}
+        {showDemo && (
+          <div
+            onClick={launchDemo}
+            style={{
+              marginTop: 28,
+              borderRadius: 18,
+              background: '#f8fafc',
+              border: '1.5px dashed #cbd5e1',
+              padding: '16px 20px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'space-between',
+              gap: 12,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = '#f1f5f9'
+              e.currentTarget.style.borderColor = 'var(--primary)'
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = '#f8fafc'
+              e.currentTarget.style.borderColor = '#cbd5e1'
+            }}
+          >
+            <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+              <div style={{
+                width: 36, height: 36, borderRadius: 10,
+                background: 'rgba(0, 119, 182, 0.1)',
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                color: 'var(--primary)',
+                flexShrink: 0
+              }}>
+                <Zap size={18} fill="currentColor" />
+              </div>
+              <div style={{ textAlign: 'left' }}>
+                <div style={{ fontSize: 13.5, fontWeight: 700, color: '#1e293b' }}>
+                  Essayer la Démo Portfolio
+                </div>
+                <div style={{ fontSize: 11.5, color: '#64748b', marginTop: 1 }}>
+                  Accès direct sans compte (simulation locale)
+                </div>
+              </div>
+            </div>
+            <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--primary)' }}>
+              Lancer &rarr;
+            </span>
+          </div>
+        )}
       </div>
 
       <style>{`
